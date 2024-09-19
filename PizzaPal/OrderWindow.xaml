@@ -1,0 +1,169 @@
+﻿<Window x:Class="PizzaPal.OrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        Title="PizzaPal Rendelés" Height="auto" Width="1000"
+        Background="#F5F5F5">
+
+    <Window.Resources>
+        <Style x:Key="PizzaCardStyle" TargetType="Border">
+            <Setter Property="Width" Value="240"/>
+            <Setter Property="Height" Value="380"/>
+            <Setter Property="Margin" Value="15"/>
+            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="PizzaImageStyle" TargetType="Image">
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Height" Value="200"/>
+            <Setter Property="Stretch" Value="UniformToFill"/>
+        </Style>
+        <Style x:Key="PizzaNameStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5,10,5,0"/>
+            <Setter Property="Foreground" Value="#333"/>
+        </Style>
+        <Style x:Key="PizzaDescriptionStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="5,5,5,5"/>
+            <Setter Property="Foreground" Value="#666"/>
+        </Style>
+        <Style x:Key="PizzaPriceStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#E21B22"/>
+            <Setter Property="Margin" Value="5,0,5,10"/>
+        </Style>
+        <Style x:Key="AddToCartButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#E21B22"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E21B22"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style TargetType="Button" x:Key="NavButtonStyle">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Navbar -->
+        <Border Background="#E21B22" Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Pizza Pál" FontSize="32" FontWeight="Bold" 
+                           FontFamily="Times New Roman" FontStyle="Italic" 
+                           Foreground="White" Margin="20,10" Grid.Column="0"/>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,20,0">
+                    <Button Style="{StaticResource NavButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:ImageAwesome Icon="ShoppingCart" Height="18" Width="18" Margin="0,0,5,0" Foreground="White"/>
+                            <TextBlock Text="Kosár" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource NavButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:ImageAwesome Icon="User" Height="18" Width="18" Margin="0,0,5,0" Foreground="White"/>
+                            <TextBlock Text="Fiókom" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+     
+        <Border Grid.Row="1" Background="Transparent" Opacity="0.9">
+            <Image Source="Images/header.jpg" Stretch="Fill" Height="150"/>
+        </Border>
+
+    
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,20,0,0">
+            <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+             
+                <Border Style="{StaticResource PizzaCardStyle}" Padding="10">
+                    <StackPanel HorizontalAlignment="Center">
+                        <Image Style="{StaticResource PizzaImageStyle}" Source="Images/margarita.jpg"/>
+                        <TextBlock Text="Margherita" Style="{StaticResource PizzaNameStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Paradicsom alap, mozzarella, bazsalikom" Style="{StaticResource PizzaDescriptionStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="1990 Ft" Style="{StaticResource PizzaPriceStyle}" HorizontalAlignment="Center"/>
+                        <Button Content="Kosárba" Style="{StaticResource AddToCartButtonStyle}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource PizzaCardStyle}" Padding="10">
+                    <StackPanel HorizontalAlignment="Center">
+                        <Image Style="{StaticResource PizzaImageStyle}" Source="Images/margarita.jpg"/>
+                        <TextBlock Text="Margherita" Style="{StaticResource PizzaNameStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Paradicsom alap, mozzarella, bazsalikom" Style="{StaticResource PizzaDescriptionStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="1990 Ft" Style="{StaticResource PizzaPriceStyle}" HorizontalAlignment="Center"/>
+                        <Button Content="Kosárba" Style="{StaticResource AddToCartButtonStyle}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+
+                <Border Style="{StaticResource PizzaCardStyle}" Padding="10">
+                    <StackPanel HorizontalAlignment="Center">
+                        <Image Style="{StaticResource PizzaImageStyle}" Source="Images/margarita.jpg"/>
+                        <TextBlock Text="Margherita" Style="{StaticResource PizzaNameStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Paradicsom alap, mozzarella, bazsalikom" Style="{StaticResource PizzaDescriptionStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="1990 Ft" Style="{StaticResource PizzaPriceStyle}" HorizontalAlignment="Center"/>
+                        <Button Content="Kosárba" Style="{StaticResource AddToCartButtonStyle}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </WrapPanel>
+        </ScrollViewer>
+
+   
+        <Border Background="#E21B22" Grid.Row="3" Height="60">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="© 2024 PizzaPal. Minden jog fenntartva." 
+                           Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
+
+                <TextBlock Grid.Column="1" Text="Kapcsolat: info@pizzapal.hu" 
+                           Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <fa:ImageAwesome Icon="Facebook" Width="20" Height="20" Foreground="White" Margin="5"/>
+                    <fa:ImageAwesome Icon="Twitter" Width="20" Height="20" Foreground="White" Margin="5"/>
+                    <fa:ImageAwesome Icon="Instagram" Width="20" Height="20" Foreground="White" Margin="5"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
