@@ -15,19 +15,13 @@ using System.Windows.Shapes;
 namespace PizzaPal
 {
     /// <summary>
-    /// Interaction logic for OrderWindow.xaml
+    /// Interaction logic for Cart.xaml
     /// </summary>
-    public partial class OrderWindow : Window
+    public partial class Cart : Window
     {
-        public OrderWindow()
+        public Cart()
         {
             InitializeComponent();
         }
-        private void shorCart(object sender, RoutedEventArgs e)
-        {
-            Cart popup = new Cart();
-            popup.ShowDialog();
-        }
-
     }
 }

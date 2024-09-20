@@ -41,7 +41,7 @@
                 </StackPanel>
                 <TextBox Style="{StaticResource InputStyle}" />
 
-                <!-- Email mező -->
+           
                 <StackPanel x:Name="EmailStack" Orientation="Horizontal" Visibility="Collapsed">
                     <fa:ImageAwesome Icon="Envelope" Height="20" Width="20" Foreground="Black" Margin="0,0,5,0" VerticalAlignment="Center"/>
                     <TextBlock Text="Email" FontSize="17" FontWeight="Bold" VerticalAlignment="Center"/>

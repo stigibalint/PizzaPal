@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
-        Title="PizzaPal Rendelés" Height="auto" Width="1000"
+        Title="PizzaPal Rendelés" MinHeight="800" Width="1000"
         Background="#F5F5F5">
 
     <Window.Resources>
@@ -72,7 +72,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Navbar -->
+       
         <Border Background="#E21B22" Grid.Row="0">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -88,8 +88,11 @@
                 <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,20,0">
                     <Button Style="{StaticResource NavButtonStyle}">
                         <StackPanel Orientation="Horizontal">
-                            <fa:ImageAwesome Icon="ShoppingCart" Height="18" Width="18" Margin="0,0,5,0" Foreground="White"/>
-                            <TextBlock Text="Kosár" VerticalAlignment="Center"/>
+                            <fa:ImageAwesome Icon="ShoppingCart" Height="18" Width="18" Margin="0,0,0,0" Foreground="White"/>
+                            <TextBlock Text="0" Margin="0 5 2 5" Visibility="Hidden"></TextBlock>
+                            <Button Background="Transparent" Foreground="white" Click="shorCart" BorderThickness="0">
+                                <TextBlock Text="Kosár" VerticalAlignment="Center"/>
+                            </Button>
                         </StackPanel>
                     </Button>
                     <Button Style="{StaticResource NavButtonStyle}">
@@ -105,10 +108,12 @@
      
         <Border Grid.Row="1" Background="Transparent" Opacity="0.9">
             <Image Source="Images/header.jpg" Stretch="Fill" Height="150"/>
+            
         </Border>
+        <Border BorderBrush="#CCCCCC"  Grid.Row="2"  BorderThickness="0,3,0,0" Margin="0,10,0,0" Width="850"/>
 
-    
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,20,0,0">
+            
             <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top">
              
                 <Border Style="{StaticResource PizzaCardStyle}" Padding="10">
