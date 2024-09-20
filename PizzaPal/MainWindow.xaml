@@ -39,20 +39,21 @@
                     <fa:ImageAwesome Icon="User" Height="20" Width="20" Foreground="Black" Margin="0,0,5,0" VerticalAlignment="Center"/>
                     <TextBlock Text="Felhasználónév" FontSize="17" FontWeight="Bold" VerticalAlignment="Center"/>
                 </StackPanel>
-                <TextBox Style="{StaticResource InputStyle}" />
+                <TextBox x:Name="UsernameTXT" Style="{StaticResource InputStyle}" />
 
            
                 <StackPanel x:Name="EmailStack" Orientation="Horizontal" Visibility="Collapsed">
                     <fa:ImageAwesome Icon="Envelope" Height="20" Width="20" Foreground="Black" Margin="0,0,5,0" VerticalAlignment="Center"/>
                     <TextBlock Text="Email" FontSize="17" FontWeight="Bold" VerticalAlignment="Center"/>
                 </StackPanel>
-                <TextBox x:Name="EmailTextBox" Style="{StaticResource InputStyle}" Visibility="Collapsed"/>
+                <TextBox  x:Name="EmailTextBox" Style="{StaticResource InputStyle}" Visibility="Collapsed"/>
 
                 <StackPanel Orientation="Horizontal">
                     <fa:ImageAwesome Icon="Lock" Height="20" Width="20" Foreground="Black" Margin="0,0,5,0" VerticalAlignment="Center"/>
                     <TextBlock Text="Jelszó" FontSize="17" FontWeight="Bold" VerticalAlignment="Center"/>
                 </StackPanel>
-                <PasswordBox Style="{StaticResource InputStyle}"/>
+                <PasswordBox x:Name="Password" Style="{StaticResource InputStyle}"/>
+
                 <Button x:Name="ActionButton" Style="{StaticResource ButtonStyle}" Click="ActionButton_Click">
                     <StackPanel Orientation="Horizontal">
                         <fa:ImageAwesome Icon="SignIn" Height="20" Width="20" Margin="0,0,10,0" Foreground="White"/>
