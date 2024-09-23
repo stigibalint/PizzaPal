@@ -35,14 +35,17 @@ namespace PizzaPal
         private void ActionButton_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameTXT.Text;
-            string password = Password.Password; 
+            string password = Password.Password;
 
             if (isLogin)
             {
                 if (LoginUser(username, password))
                 {
                     MessageBox.Show("Bejelentkezés sikeres!");
+
+                    // Create an instance of OrderWindow and set the UserName property
                     OrderWindow orderWindow = new OrderWindow();
+                    orderWindow.UserName = username;  // Set the username
                     orderWindow.Show();
                     this.Close();
                 }

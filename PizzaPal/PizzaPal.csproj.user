@@ -13,6 +13,9 @@
     <Compile Update="OrderWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="ProfilWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Cart.xaml">
@@ -22,6 +25,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="OrderWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ProfilWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
