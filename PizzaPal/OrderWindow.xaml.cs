@@ -19,52 +19,15 @@ namespace PizzaPal
     /// </summary>
     public partial class OrderWindow : Window
     {
-        public string UserName { get; set; }
-
         public OrderWindow()
         {
             InitializeComponent();
-        }
-
-        protected override void OnInitialized(EventArgs e)
-        {
-            base.OnInitialized(e);
-            UpdateUserInterface();
-        }
-
-        private void UpdateUserInterface()
-        {
-            if (!string.IsNullOrEmpty(UserName))
-            {
-                UserNameTextBlock.Text = $"{UserName}!"; 
-                                                                   
-            }
-            else
-            {
-                UserNameTextBlock.Text = "Bejelentkezés";  
-            }
         }
         private void shorCart(object sender, RoutedEventArgs e)
         {
             Cart popup = new Cart();
             popup.ShowDialog();
         }
-        private void btnProfil(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(UserName))
-            {
 
-                ProfilWindow profilWindow = new ProfilWindow();
-                profilWindow.Show();
-            }
-            else
-            {
-            
-                MainWindow loginWindow = new MainWindow();
-                loginWindow.Show();
-            }
-
-            this.Close();  
-        }
     }
 }

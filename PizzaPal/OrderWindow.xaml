@@ -95,13 +95,10 @@
                             </Button>
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource NavButtonStyle}" Click="btnProfil">
+                    <Button Style="{StaticResource NavButtonStyle}">
                         <StackPanel Orientation="Horizontal">
-                            
                             <fa:ImageAwesome Icon="User" Height="18" Width="18" Margin="0,0,5,0" Foreground="White"/>
-
-                            <TextBlock x:Name="UserNameTextBlock" Text="Bejelentkezés" VerticalAlignment="Center"/>
-
+                            <TextBlock Text="Fiókom" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
