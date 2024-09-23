@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient; 
+﻿using MySql.Data.MySqlClient;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
 
 namespace PizzaPal
@@ -22,11 +24,43 @@ namespace PizzaPal
                 var command = connection.CreateCommand();
                 command.CommandText = @"
                     CREATE TABLE IF NOT EXISTS Felhasznalok (
-                        felhasznaloId INT AUTO_INCREMENT PRIMARY KEY,
+                        felhasznaloId INT PRIMARY KEY AUTO_INCREMENT,
                         username VARCHAR(255) NOT NULL UNIQUE,
                         password VARCHAR(255) NOT NULL,
                         email VARCHAR(255) NOT NULL UNIQUE,
-                        adminJogosultsag BOOLEAN NOT NULL
+                        Jogosultsag ENUM('admin', 'user') NOT NULL
+                    );
+
+                    CREATE TABLE IF NOT EXISTS Pizza (
+                        pizzaId INT PRIMARY KEY AUTO_INCREMENT,
+                        pizzaNev VARCHAR(255) NOT NULL,
+                        egysegAr INT NOT NULL
+                    );
+
+                    CREATE TABLE IF NOT EXISTS Alapanyag (
+                        alapanyagId INT PRIMARY KEY AUTO_INCREMENT,
+                        alapanyagNev VARCHAR(255) NOT NULL,
+                        alapanyagMennyiseg INT NOT NULL
+                    );
+
+                    CREATE TABLE IF NOT EXISTS PizzaAlapanyag (
+                        pizzaId INT,
+                        alapanyagId INT,
+                        mennyiseg INT NOT NULL,
+                        PRIMARY KEY (pizzaId, alapanyagId),
+                        FOREIGN KEY (pizzaId) REFERENCES Pizza(pizzaId),
+                        FOREIGN KEY (alapanyagId) REFERENCES Alapanyag(alapanyagId)
+                    );
+
+                    CREATE TABLE IF NOT EXISTS Rendeles (
+                        rendelesId INT PRIMARY KEY AUTO_INCREMENT,
+                        felhasznaloId INT,
+                        pizzaId INT,
+                        mennyiseg INT NOT NULL,
+                        datum DATE NOT NULL,
+                        cim VARCHAR(255) NOT NULL,
+                        FOREIGN KEY (felhasznaloId) REFERENCES Felhasznalok(felhasznaloId),
+                        FOREIGN KEY (pizzaId) REFERENCES Pizza(pizzaId)
                     );";
                 command.ExecuteNonQuery();
             }
@@ -39,15 +73,25 @@ namespace PizzaPal
 
             if (isLogin)
             {
-                if (LoginUser(username, password))
+                string jogosultsag = LoginUser(username, password);
+
+                if (jogosultsag != null)
                 {
                     MessageBox.Show("Bejelentkezés sikeres!");
 
-                    // Create an instance of OrderWindow and set the UserName property
-                    OrderWindow orderWindow = new OrderWindow();
-                    orderWindow.UserName = username;  // Set the username
-                    orderWindow.Show();
-                    this.Close();
+                    if (jogosultsag == "admin")
+                    {
+                        AdminPanel adminPanel = new AdminPanel();
+                        adminPanel.Show();
+                    }
+                    else
+                    {
+                        OrderWindow orderWindow = new OrderWindow();
+                        orderWindow.UserName = username;
+                        orderWindow.Show();
+                    }
+
+                    this.Close(); 
                 }
                 else
                 {
@@ -68,21 +112,6 @@ namespace PizzaPal
             }
         }
 
-        private bool LoginUser(string username, string password)
-        {
-            using (var connection = new MySqlConnection(connectionString))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM Felhasznalok WHERE username = @username AND password = @password";
-                command.Parameters.AddWithValue("@username", username);
-                command.Parameters.AddWithValue("@password", password);
-                using (var reader = command.ExecuteReader())
-                {
-                    return reader.HasRows; 
-                }
-            }
-        }
 
         private bool RegisterUser(string username, string email, string password)
         {
@@ -92,17 +121,62 @@ namespace PizzaPal
                 try
                 {
                     var command = connection.CreateCommand();
-                    command.CommandText = "INSERT INTO Felhasznalok (username, email, password, adminJogosultsag) VALUES (@username, @email, @password, 0)";
+                    string hashedPassword = HashPassword(username, password);
+                    command.CommandText = "INSERT INTO Felhasznalok (username, email, password, Jogosultsag) VALUES (@username, @email, @password, 'user')";
                     command.Parameters.AddWithValue("@username", username);
-                    command.Parameters.AddWithValue("@password", password);
+                    command.Parameters.AddWithValue("@password", hashedPassword);
                     command.Parameters.AddWithValue("@email", email);
-                    command.ExecuteNonQuery(); 
+                    command.ExecuteNonQuery();
                     return true;
                 }
-                catch (MySqlException)
+                catch (MySqlException ex)
                 {
-                    return false; 
+                    MessageBox.Show($"Registration error: {ex.Message}");
+                    return false;
                 }
+            }
+        }
+
+        private string LoginUser(string username, string password)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "SELECT password, Jogosultsag FROM Felhasznalok WHERE username = @username";
+                command.Parameters.AddWithValue("@username", username);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        string storedHashedPassword = reader.GetString(0);
+                        string jogosultsag = reader.GetString(1);
+                        string hashedInputPassword = HashPassword(username, password);
+
+                        if (storedHashedPassword == hashedInputPassword)
+                        {
+                            return jogosultsag; 
+                        }
+                    }
+                }
+            }
+            return null; 
+        }
+
+
+        private string HashPassword(string username, string password)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] combinedBytes = new byte[usernameBytes.Length + passwordBytes.Length];
+                Buffer.BlockCopy(usernameBytes, 0, combinedBytes, 0, usernameBytes.Length);
+                Buffer.BlockCopy(passwordBytes, 0, combinedBytes, usernameBytes.Length, passwordBytes.Length);
+
+                byte[] hashBytes = sha256.ComputeHash(combinedBytes);
+                return Convert.ToBase64String(hashBytes);
             }
         }
 

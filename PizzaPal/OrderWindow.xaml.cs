@@ -1,70 +1,66 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using FontAwesome.WPF;
 
 namespace PizzaPal
 {
-    /// <summary>
-    /// Interaction logic for OrderWindow.xaml
-    /// </summary>
     public partial class OrderWindow : Window
     {
-        public string UserName { get; set; }
+        private string _userName;
+        public string UserName
+        {
+            get { return _userName; }
+            set
+            {
+                _userName = value;
+                UpdateUserInterface();
+            }
+        }
 
         public OrderWindow()
         {
             InitializeComponent();
         }
 
-        protected override void OnInitialized(EventArgs e)
-        {
-            base.OnInitialized(e);
-            UpdateUserInterface();
-        }
-
         private void UpdateUserInterface()
         {
-            if (!string.IsNullOrEmpty(UserName))
+            if (!string.IsNullOrEmpty(_userName))
             {
-                UserNameTextBlock.Text = $"{UserName}!"; 
-                                                                   
+                UserNameTextBlock.Text = _userName;
+                var parentStackPanel = (StackPanel)UserNameTextBlock.Parent;
+                var iconElement = (ImageAwesome)parentStackPanel.Children[0];
+            
             }
             else
             {
-                UserNameTextBlock.Text = "Bejelentkezés";  
+                UserNameTextBlock.Text = "Bejelentkezés";
+                var parentStackPanel = (StackPanel)UserNameTextBlock.Parent;
+                var iconElement = (ImageAwesome)parentStackPanel.Children[0];
+               
             }
         }
+
+        private void btnProfil(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(_userName))
+            {
+                MainWindow loginWindow = new MainWindow();
+                loginWindow.Show();
+                this.Close();
+            }
+            else
+            {
+                ProfileWindow profilWindow = new ProfileWindow();
+                profilWindow.Show();
+                this.Close();
+            }
+        }
+
         private void shorCart(object sender, RoutedEventArgs e)
         {
             Cart popup = new Cart();
             popup.ShowDialog();
-        }
-        private void btnProfil(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(UserName))
-            {
-
-                ProfilWindow profilWindow = new ProfilWindow();
-                profilWindow.Show();
-            }
-            else
-            {
-            
-                MainWindow loginWindow = new MainWindow();
-                loginWindow.Show();
-            }
-
-            this.Close();  
         }
     }
 }
