@@ -51,12 +51,16 @@ namespace PizzaPal
             }
             else
             {
-                ProfileWindow profilWindow = new ProfileWindow();
-                profilWindow.Show();
-                this.Close();
+                PizzaList.Visibility = Visibility.Hidden;
+                ProfilSzerkesztoGrid.Visibility = Visibility.Visible;
             }
         }
-
+        private void BackToPizzaList_Click(object sender, RoutedEventArgs e)
+        {
+          
+            PizzaList.Visibility = Visibility.Visible;
+            ProfilSzerkesztoGrid.Visibility = Visibility.Hidden;
+        }
         private void shorCart(object sender, RoutedEventArgs e)
         {
             Cart popup = new Cart();
