@@ -2,7 +2,7 @@
 icon: groups
 ---
 # A csapatunk
-A **nullReference** csapat a debreceni *DSZC Mechwart András Gépipari és Informatikai Technikum* 12.B osztályos tanulóiból áll.
+A **nullIdk** csapat a debreceni *DSZC Mechwart András Gépipari és Informatikai Technikum* 12.B osztályos tanulóiból áll.
 
 ## Györfi Marcell
 Érdeklődöm az informatika, a tudomány, és a filmek iránt. Szabadidőmben programozok, videójátékokkal játszok, vagy gitározok.
