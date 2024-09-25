@@ -1,0 +1,137 @@
+﻿<Window x:Class="PizzaPal.AdminPanel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        
+        Title="PizzaPal Admin Panel" Height="700" Width="1000"
+        Background="#F0F2F5">
+
+    <Window.Resources>
+        <Style x:Key="HeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="Foreground" Value="#333333"/>
+        </Style>
+
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="1" Direction="270" Color="#22000000" BlurRadius="20" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="InputStyle" TargetType="Control">
+            <Setter Property="Margin" Value="0,5,0,15"/>
+            <Setter Property="Height" Value="40"/>
+        </Style>
+
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#666666"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="#d40404">
+            <StackPanel>
+                <TextBlock Text="PizzaPal Admin" FontSize="30" FontWeight="Bold" Foreground="White" Margin="20,20,10,20" HorizontalAlignment="Left"/>
+
+                <Button Click="PizzaManagement_Click" Margin="10,5" Background="Transparent" Foreground="White" BorderThickness="0" FontSize="20" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Icon="PieChart" Height="24" Width="24" Foreground="White" Margin="5,0"/>
+                        <TextBlock Text="Pizzák kezelése" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Click="UserManagement_Click" Margin="10,5" Background="Transparent" Foreground="White" BorderThickness="0" FontSize="20" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Icon="Users" Height="24" Width="24" Foreground="White" Margin="5,0"/>
+                        <TextBlock Text="Felhasználók kezelése" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Margin="10,5" Background="Transparent" Foreground="White" BorderThickness="0" FontSize="20" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:ImageAwesome Icon="ShoppingCart" Height="24" Width="24" Foreground="White" Margin="5,0"/>
+                        <TextBlock Text="Rendelések" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Column="1" Margin="30">
+            <StackPanel x:Name="MainContent">
+              
+                <StackPanel x:Name="PizzaManagementSection">
+                    <TextBlock Text="Új Pizza Hozzáadása" Style="{StaticResource HeaderStyle}"/>
+                    <Border Style="{StaticResource CardStyle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBox Style="{StaticResource InputStyle}" />
+                                <TextBox Style="{StaticResource InputStyle}" Height="80" />
+                                <TextBox Style="{StaticResource InputStyle}"/>
+                                <Button Content="Mentés" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="0,10,0,0"/>
+                            </StackPanel>
+
+                            <Border Grid.Column="1" Background="#EEEEEE" CornerRadius="4" Margin="20,0,0,0">
+                                <Grid>
+                                    <TextBlock Text="Kép feltöltése" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#666666"/>
+                                    <fa:ImageAwesome Icon="Upload" Height="40" Width="40" Foreground="#666666" Margin="0,10,0,0"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <TextBlock Text="Pizza Törlése vagy módosítása" Style="{StaticResource HeaderStyle}" Margin="0,40,0,20"/>
+                    <Border Style="{StaticResource CardStyle}">
+                        <TextBlock Text="Kérlek, válassz egy pizzát a listából a törléshez vagy módosításhoz." Margin="20"/>
+                        <!-- Additional UI for deleting or editing a pizza can be added here -->
+                    </Border>
+                </StackPanel>
+
+                <!-- User Management Section -->
+                <StackPanel x:Name="UserManagementSection" Visibility="Collapsed">
+                    <TextBlock Text="Felhasználók Kezelése" Style="{StaticResource HeaderStyle}" Margin="0,40,0,20"/>
+                    <Border Style="{StaticResource CardStyle}">
+                        <DataGrid AutoGenerateColumns="False" Height="300">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Név" Width="*"/>
+                                <DataGridTextColumn Header="Email" Width="*"/>
+                                <DataGridTextColumn Header="Regisztráció dátuma" Width="*"/>
+                                <DataGridTemplateColumn Header="Műveletek" Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="Szerkesztés" Margin="0,0,5,0"/>
+                                                <Button Content="Törlés" Background="#FF5252"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

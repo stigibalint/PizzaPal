@@ -9,6 +9,8 @@ namespace PizzaPal
     {
         private bool isLogin = true;
         private string connectionString = "Server=localhost;Database=PizzaPalDB;Uid=root;Pwd=;";
+        private string bejelentkezettId;
+
 
         public MainWindow()
         {
@@ -23,63 +25,77 @@ namespace PizzaPal
                 connection.Open();
                 var command = connection.CreateCommand();
                 command.CommandText = @"
+                    CREATE TABLE IF NOT EXISTS Felhasznalok (
+                        felhasznaloId INT PRIMARY KEY AUTO_INCREMENT,
+                        username VARCHAR(255) NOT NULL UNIQUE,
+                        password VARCHAR(255) NOT NULL,
+                        email VARCHAR(255) NOT NULL UNIQUE,
+                        Jogosultsag ENUM('admin', 'user') NOT NULL
+                    );
 
+                    CREATE TABLE IF NOT EXISTS Pizza (
+                        pizzaId INT PRIMARY KEY AUTO_INCREMENT,
+                        pizzaNev VARCHAR(255) NOT NULL,
+                        egysegAr INT NOT NULL
+                    );
 
-                   CREATE TABLE IF NOT EXISTS Felhasznalok (
-    felhasznaloId INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    Jogosultsag ENUM('admin', 'user') NOT NULL
-);
+                    CREATE TABLE IF NOT EXISTS Alapanyag (
+                        alapanyagId INT PRIMARY KEY AUTO_INCREMENT,
+                        alapanyagNev VARCHAR(255) NOT NULL,
+                        alapanyagMennyiseg INT NOT NULL
+                    );
 
-CREATE TABLE IF NOT EXISTS Pizza (
-    pizzaId INT PRIMARY KEY AUTO_INCREMENT,
-    pizzaNev VARCHAR(255) NOT NULL,
-    egysegAr INT NOT NULL
-);
+                    CREATE TABLE IF NOT EXISTS PizzaAlapanyag (
+                        pizzaId INT,
+                        alapanyagId INT,
+                        mennyiseg INT NOT NULL,
+                        PRIMARY KEY (pizzaId, alapanyagId),
+                        FOREIGN KEY (pizzaId) REFERENCES Pizza(pizzaId),
+                        FOREIGN KEY (alapanyagId) REFERENCES Alapanyag(alapanyagId)
+                    );
 
-CREATE TABLE IF NOT EXISTS Alapanyag (
-    alapanyagId INT PRIMARY KEY AUTO_INCREMENT,
-    alapanyagNev VARCHAR(255) NOT NULL,
-    alapanyagMennyiseg INT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS PizzaAlapanyag (
-    pizzaId INT,
-    alapanyagId INT,
-    mennyiseg INT NOT NULL,
-    PRIMARY KEY (pizzaId, alapanyagId),
-    FOREIGN KEY (pizzaId) REFERENCES Pizza(pizzaId),
-    FOREIGN KEY (alapanyagId) REFERENCES Alapanyag(alapanyagId)
-);
-
-CREATE TABLE IF NOT EXISTS Rendeles (
-    rendelesId INT PRIMARY KEY AUTO_INCREMENT,
-    felhasznaloId INT,
-    pizzaId INT,
-    mennyiseg INT NOT NULL,
-    datum DATE NOT NULL,
-    cim VARCHAR(255) NOT NULL,
-    FOREIGN KEY (felhasznaloId) REFERENCES Felhasznalok(felhasznaloId), -- Corrected reference
-    FOREIGN KEY (pizzaId) REFERENCES Pizza(pizzaId));";
+                    CREATE TABLE IF NOT EXISTS Rendeles (
+                        rendelesId INT PRIMARY KEY AUTO_INCREMENT,
+                        felhasznaloId INT,
+                        pizzaId INT,
+                        mennyiseg INT NOT NULL,
+                        datum DATE NOT NULL,
+                        cim VARCHAR(255) NOT NULL,
+                        FOREIGN KEY (felhasznaloId) REFERENCES Felhasznalok(felhasznaloId),
+                        FOREIGN KEY (pizzaId) REFERENCES Pizza(pizzaId)
+                    );";
                 command.ExecuteNonQuery();
+
             }
         }
 
         private void ActionButton_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameTXT.Text;
-            string password = Password.Password; 
+            string password = Password.Password;
 
             if (isLogin)
             {
-                if (LoginUser(username, password))
+                string jogosultsag = LoginUser(username, password);
+
+                if (jogosultsag != null)
                 {
                     MessageBox.Show("Bejelentkezés sikeres!");
-                    OrderWindow orderWindow = new OrderWindow();
-                    orderWindow.Show();
-                    this.Close();
+
+                    if (jogosultsag == "admin")
+                    {
+                        AdminPanel adminPanel = new AdminPanel();
+                        adminPanel.Show();
+                    }
+                    else
+                    {
+                        OrderWindow orderWindow = new OrderWindow();
+                        orderWindow.Id = bejelentkezettId.ToString();
+                        orderWindow.UserName = username;
+                        orderWindow.Show();
+                    }
+
+                    this.Close(); 
                 }
                 else
                 {
@@ -99,6 +115,7 @@ CREATE TABLE IF NOT EXISTS Rendeles (
                 }
             }
         }
+
 
         private bool RegisterUser(string username, string email, string password)
         {
@@ -124,39 +141,46 @@ CREATE TABLE IF NOT EXISTS Rendeles (
             }
         }
 
-        private bool LoginUser(string username, string password)
+
+        private string LoginUser(string username, string password)
         {
             using (var connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "SELECT password FROM Felhasznalok WHERE username = @username";
+                command.CommandText = "SELECT password, Jogosultsag, felhasznaloId  FROM Felhasznalok WHERE username = @username";
                 command.Parameters.AddWithValue("@username", username);
+
                 using (var reader = command.ExecuteReader())
                 {
                     if (reader.Read())
                     {
                         string storedHashedPassword = reader.GetString(0);
+                        string jogosultsag = reader.GetString(1);
                         string hashedInputPassword = HashPassword(username, password);
-                        return storedHashedPassword == hashedInputPassword;
+
+                        if (storedHashedPassword == hashedInputPassword)
+                        {
+                            bejelentkezettId = reader.GetString(2);
+                            return jogosultsag; 
+                        }
                     }
-                    return false; // Username not found
                 }
             }
+            return null; 
         }
+
 
         private string HashPassword(string username, string password)
         {
             using (var sha256 = SHA256.Create())
             {
-                // Combine username and password
                 byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
                 byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
                 byte[] combinedBytes = new byte[usernameBytes.Length + passwordBytes.Length];
                 Buffer.BlockCopy(usernameBytes, 0, combinedBytes, 0, usernameBytes.Length);
                 Buffer.BlockCopy(passwordBytes, 0, combinedBytes, usernameBytes.Length, passwordBytes.Length);
 
-                // Hash the combined bytes
                 byte[] hashBytes = sha256.ComputeHash(combinedBytes);
                 return Convert.ToBase64String(hashBytes);
             }
