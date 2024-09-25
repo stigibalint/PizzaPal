@@ -8,7 +8,7 @@
 
     <Window.Resources>
         <Style x:Key="HeaderStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontSize" Value="23"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Margin" Value="0,0,0,20"/>
             <Setter Property="Foreground" Value="#333333"/>
