@@ -1,1 +1,1 @@
-https://stigibalint.github.io/PizzaPal/
+PizzaPal
