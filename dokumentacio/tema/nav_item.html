@@ -1,0 +1,16 @@
+<a href="{{ nav_item.url|url }}" class="list-group-item list-group-item-action">
+    <span class="material-icons">
+        {{ nav_item.meta.icon }}
+    </span>
+    {{ nav_item.title }}
+</a>
+{% if nav_item.active %}
+{% for toc in nav_item.toc %}{% for toc in toc.children %}
+<a href="{{ toc.url|url }}" class="list-group-item list-group-item-action list-group-item-secondary ps-4">
+    <span class="material-icons">
+        chevron_right
+    </span>
+    {{ toc.title }}
+</a>
+{% endfor %}{% endfor %}
+{% endif %}

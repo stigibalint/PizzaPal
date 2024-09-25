@@ -1,0 +1,34 @@
+site_name: Fogadás dokumentáció
+site_url: 'https://stigibalint.github.io/PizzaPal/'
+
+nav:
+  - Kezdőlap: 'index.md'
+  - Bevezetés:
+    - 'bevezetes/programrol.md'
+    - 'bevezetes/feladat.md'
+    - 'bevezetes/csapat.md'
+  - Felhasználói dokumentáció:
+    - 'felhasznaloi/mukodes.md'
+    - 'felhasznaloi/fiokkezeles.md'
+    - 'felhasznaloi/fogado.md'
+    - 'felhasznaloi/szervezo.md'
+    - 'felhasznaloi/admin.md'
+    - 'felhasznaloi/kimutatasok.md'
+  - Fejlesztői dokumentáció:
+    - 'fejlesztoi/fejlesztes.md'
+    - 'fejlesztoi/futtatas.md'
+    - 'fejlesztoi/technologiak.md'
+    - 'fejlesztoi/szerkezet.md'
+    - 'fejlesztoi/szorzo.md'
+    - 'fejlesztoi/email.md'
+    - 'fejlesztoi/dokumentacio.md'
+
+theme:
+  name: null
+  custom_dir: tema
+  search_index_only: false
+
+plugins:
+  - search:
+      lang: hu
+      
