@@ -26,7 +26,61 @@ namespace PizzaPal
         public OrderWindow()
         {
             InitializeComponent();
+            CreateDatabase();
             LoadPizzas();
+        }
+
+        private void CreateDatabase()
+        {
+
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = @"
+                    CREATE TABLE IF NOT EXISTS Felhasznalok (
+                        felhasznaloId INT PRIMARY KEY AUTO_INCREMENT,
+                        username VARCHAR(255) NOT NULL UNIQUE,
+                        password VARCHAR(255) NOT NULL,
+                        email VARCHAR(255) NOT NULL UNIQUE,
+                        Jogosultsag ENUM('admin', 'user') NOT NULL
+                    );
+
+                    CREATE TABLE IF NOT EXISTS Pizza (
+                        pizzaId INT PRIMARY KEY AUTO_INCREMENT,
+                        pizzaNev VARCHAR(255) NOT NULL,
+                        egysegAr INT NOT NULL
+                    );
+
+                    CREATE TABLE IF NOT EXISTS Alapanyag (
+                        alapanyagId INT PRIMARY KEY AUTO_INCREMENT,
+                        alapanyagNev VARCHAR(255) NOT NULL,
+                        alapanyagMennyiseg INT NOT NULL
+                    );
+
+                    CREATE TABLE IF NOT EXISTS PizzaAlapanyag (
+                        pizzaId INT,
+                        alapanyagId INT,
+                        mennyiseg INT NOT NULL,
+                        PRIMARY KEY (pizzaId, alapanyagId),
+                        FOREIGN KEY (pizzaId) REFERENCES Pizza(pizzaId),
+                        FOREIGN KEY (alapanyagId) REFERENCES Alapanyag(alapanyagId)
+                    );
+
+                    CREATE TABLE IF NOT EXISTS Rendeles (
+                        rendelesId INT PRIMARY KEY AUTO_INCREMENT,
+                        felhasznaloId INT,
+                        pizzaId INT,
+                        mennyiseg INT NOT NULL,
+                        datum DATE NOT NULL,
+                        cim VARCHAR(255) NOT NULL,
+                        FOREIGN KEY (felhasznaloId) REFERENCES Felhasznalok(felhasznaloId),
+                        FOREIGN KEY (pizzaId) REFERENCES Pizza(pizzaId)
+                    );";
+                command.ExecuteNonQuery();
+
+            }
+        
         }
 
         private void LoadPizzas()

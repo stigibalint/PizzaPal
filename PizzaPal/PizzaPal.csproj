@@ -11,7 +11,7 @@
   <ItemGroup>
     <None Remove="Images\Group.jpg" />
     <None Remove="Images\header.jpg" />
-    <None Remove="Images\margarita.jpg" />
+    <None Remove="Images\margherita.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +27,7 @@
     <Resource Include="Images\header.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Images\margarita.jpg">
+    <Resource Include="Images\margherita.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

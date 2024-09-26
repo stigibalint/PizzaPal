@@ -12,6 +12,7 @@ namespace PizzaPal
             public int PizzaId { get; set; }
             public string PizzaNev { get; set; }
             public int EgysegAr { get; set; }
-        
+            public string PizzaImagePath { get; set; } 
+
     }
 }
