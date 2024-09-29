@@ -268,13 +268,7 @@ namespace PizzaPal
                 };
 
            
-                var ingredientsTextBlock = new TextBlock
-                {
-                    Text = $"Alapanyagok: {cartItem.Pizza.Alapanyagok}",
-                    FontSize = 14,
-                    TextWrapping = TextWrapping.Wrap
-                };
-
+         
                
                 var removeButton = new Button
                 {
@@ -298,7 +292,7 @@ namespace PizzaPal
               
                 Grid.SetColumn(detailsStackPanel, 1);
                 detailsStackPanel.Children.Add(pizzaNameTextBlock);
-                detailsStackPanel.Children.Add(ingredientsTextBlock);
+              
                 cardGrid.Children.Add(detailsStackPanel);
 
               
@@ -319,8 +313,114 @@ namespace PizzaPal
             cartItemCountTextBlock.Text = totalQuantity.ToString();
             cartItemCountTextBlock.Visibility = totalQuantity > 0 ? Visibility.Visible : Visibility.Hidden;
         }
+        private void PaymentButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_cartItems.Count > 0)
+            {
+                ProcessPayment();
+            }
+            else
+            {
+                MessageBox.Show("A kosár üres. Kérjük, adjon hozzá termékeket a rendeléshez.", "Üres kosár", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+        private void ProcessPayment()
+        {
+            string userAddress = GetUserAddress();
+            if (string.IsNullOrWhiteSpace(userAddress))
+            {
+                MessageBox.Show("Kérjük, adja meg a szállítási címet!", "Hiányzó cím", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var cartItem in _cartItems)
+                        {
+                        
+                            string insertOrderQuery = @"
+                        INSERT INTO Rendeles (felhasznaloId, pizzaId, mennyiseg, datum, cim)
+                        VALUES (@userId, @pizzaId, @quantity, @date, @address)";
+
+                            using (var command = new MySqlCommand(insertOrderQuery, connection, transaction))
+                            {
+                                command.Parameters.AddWithValue("@userId", GetUserIdByUsername(_userName));
+                                command.Parameters.AddWithValue("@pizzaId", cartItem.Pizza.PizzaId);
+                                command.Parameters.AddWithValue("@quantity", cartItem.Quantity);
+                                command.Parameters.AddWithValue("@date", DateTime.Now.Date);
+                                command.Parameters.AddWithValue("@address", userAddress);
+                                command.ExecuteNonQuery();
+                            }
 
 
+                            string updateIngredientsQuery = @"
+                        UPDATE Alapanyag a
+                        JOIN PizzaAlapanyag pa ON a.alapanyagId = pa.alapanyagId
+                        SET a.alapanyagMennyiseg = a.alapanyagMennyiseg - (pa.mennyiseg * @orderQuantity)
+                        WHERE pa.pizzaId = @pizzaId";
+
+                            using (var command = new MySqlCommand(updateIngredientsQuery, connection, transaction))
+                            {
+                                command.Parameters.AddWithValue("@orderQuantity", cartItem.Quantity);
+                                command.Parameters.AddWithValue("@pizzaId", cartItem.Pizza.PizzaId);
+                                command.ExecuteNonQuery();
+                            }
+                        }
+
+                        transaction.Commit();
+                        MessageBox.Show("Rendelés sikeresen feldolgozva!", "Siker", MessageBoxButton.OK, MessageBoxImage.Information);
+                        _cartItems.Clear();
+                        UpdateCart();
+                        ClearAddressFields();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show($"Hiba történt a rendelés feldolgozása során: {ex.Message}", "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }
+
+        private string GetUserAddress()
+        {
+            string street = StreetAddressTextBox.Text.Trim();
+            string city = CityTextBox.Text.Trim();
+            string zipCode = ZipCodeTextBox.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(street) || string.IsNullOrWhiteSpace(city) || string.IsNullOrWhiteSpace(zipCode))
+            {
+                return string.Empty;
+            }
+
+            return $"{street}, {zipCode} {city}";
+        }
+
+        private void ClearAddressFields()
+        {
+            StreetAddressTextBox.Clear();
+            CityTextBox.Clear();
+            ZipCodeTextBox.Clear();
+        }
+        private int GetUserIdByUsername(string username)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT felhasznaloId FROM Felhasznalok WHERE username = @username";
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@username", username);
+                    var result = command.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : -1;
+                }
+            }
+        }
         private void AddToCart(Pizza pizza)
         {
             var existingItem = _cartItems.FirstOrDefault(ci => ci.Pizza.PizzaId == pizza.PizzaId);
@@ -406,6 +506,8 @@ namespace PizzaPal
                 else
                 {
                     PizzaList.Visibility = Visibility.Hidden;
+                    wpPizzak.Visibility= Visibility.Hidden;
+                    CartSection.Visibility = Visibility.Hidden;
                     ProfilSzerkesztoGrid.Visibility = Visibility.Visible;
                 }
             }

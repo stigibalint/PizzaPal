@@ -30,7 +30,7 @@ namespace PizzaPal
             PizzaManagementSection.Visibility = Visibility.Visible;
             InventoryManagementSection.Visibility = Visibility.Collapsed;
 
-       
+
 
         }
 
@@ -39,7 +39,7 @@ namespace PizzaPal
             PizzaManagementSection.Visibility = Visibility.Collapsed;
             InventoryManagementSection.Visibility = Visibility.Collapsed;
 
-          
+
 
         }
 
@@ -48,7 +48,7 @@ namespace PizzaPal
             PizzaManagementSection.Visibility = Visibility.Collapsed;
             InventoryManagementSection.Visibility = Visibility.Visible;
 
-   
+
         }
 
         private void FrissitesButton_Click(object sender, RoutedEventArgs e)
@@ -107,12 +107,12 @@ namespace PizzaPal
                                 var command = connection.CreateCommand();
                                 command.Transaction = transaction;
 
-                               
+
                                 command.CommandText = "DELETE FROM PizzaAlapanyag WHERE alapanyagId = @id";
                                 command.Parameters.AddWithValue("@id", alapanyag.AlapanyagId);
                                 command.ExecuteNonQuery();
 
-               
+
                                 command.CommandText = "DELETE FROM Alapanyag WHERE alapanyagId = @id";
                                 int rowsAffected = command.ExecuteNonQuery();
 
@@ -121,7 +121,7 @@ namespace PizzaPal
                                     transaction.Commit();
                                     MessageBox.Show("Az alapanyag és a kapcsolódó pizza összetevők sikeresen törölve!");
                                     LoadAlapanyagList();
-                                    LoadPizzaList(); 
+                                    LoadPizzaList();
                                 }
                                 else
                                 {
@@ -226,15 +226,6 @@ namespace PizzaPal
                 return;
             }
 
-            foreach (var alapanyag in selectedAlapanyagok)
-            {
-                if (alapanyag.AlapanyagMennyiseg <= 0)
-                {
-                    MessageBox.Show($"Az {alapanyag.AlapanyagNev} alapanyag elfogyott!");
-                    return;
-                }
-            }
-
             using (var connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
@@ -245,7 +236,6 @@ namespace PizzaPal
                     var command = connection.CreateCommand();
                     command.Transaction = transaction;
 
-
                     command.CommandText = "SELECT COUNT(*) FROM Pizza WHERE pizzaNev = @pizzaNev";
                     command.Parameters.AddWithValue("@pizzaNev", pizzaNev);
                     var count = Convert.ToInt32(command.ExecuteScalar());
@@ -255,7 +245,6 @@ namespace PizzaPal
                         MessageBox.Show("Ez a pizza név már létezik, kérlek adj meg egy másik nevet.");
                         return;
                     }
-
 
                     command.CommandText = "INSERT INTO Pizza (pizzaNev, egysegAr) VALUES (@pizzaNev, @egysegAr); SELECT LAST_INSERT_ID();";
                     command.Parameters.AddWithValue("@egysegAr", egysegAr);
@@ -269,16 +258,6 @@ namespace PizzaPal
                         command.Parameters.AddWithValue("@alapanyagId", alapanyag.AlapanyagId);
                         command.Parameters.AddWithValue("@mennyiseg", 1);
                         command.ExecuteNonQuery();
-
-                        command.CommandText = "UPDATE Alapanyag SET alapanyagMennyiseg = alapanyagMennyiseg - 1 WHERE alapanyagId = @alapanyagId AND alapanyagMennyiseg > 0";
-                        command.Parameters.Clear();
-                        command.Parameters.AddWithValue("@alapanyagId", alapanyag.AlapanyagId);
-                        var rowsAffected = command.ExecuteNonQuery();
-
-                        if (rowsAffected == 0)
-                        {
-                            throw new Exception($"Nincs elegendő {alapanyag.AlapanyagNev} az Alapanyag raktárban!");
-                        }
                     }
 
                     transaction.Commit();
@@ -298,7 +277,6 @@ namespace PizzaPal
         }
 
 
-
         private void UploadPizzaImage_Click(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog
@@ -310,11 +288,11 @@ namespace PizzaPal
             {
                 var fileName = Path.GetFileName(openFileDialog.FileName);
 
-         
+
                 var projectPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\.."));
                 var destPath = Path.Combine(projectPath, "Images", fileName);
 
-             
+
                 Directory.CreateDirectory(Path.Combine(projectPath, "Images"));
                 File.Copy(openFileDialog.FileName, destPath, true);
 
@@ -328,31 +306,62 @@ namespace PizzaPal
             var alapanyagNev = AlapanyagNevTextBox.Text;
             int mennyiseg;
 
-            try
+            if (string.IsNullOrWhiteSpace(alapanyagNev))
             {
-                mennyiseg = int.Parse(AlapanyagMennyisegTextBox.Text);
-            }
-            catch (FormatException)
-            {
-                MessageBox.Show("Kérlek, adj meg egy érvényes mennyiséget (szám).");
+                MessageBox.Show("Kérlek, add meg az alapanyag nevét.");
                 return;
             }
 
-            using (var connection = new MySqlConnection(connectionString))
+            if (!int.TryParse(AlapanyagMennyisegTextBox.Text, out mennyiseg) || mennyiseg <= 0)
             {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = "INSERT INTO Alapanyag (alapanyagNev, alapanyagMennyiseg) VALUES (@alapanyagNev, @mennyiseg)";
-                command.Parameters.AddWithValue("@alapanyagNev", alapanyagNev);
-                command.Parameters.AddWithValue("@mennyiseg", mennyiseg);
-                command.ExecuteNonQuery();
+                MessageBox.Show("Kérlek, adj meg egy érvényes, pozitív mennyiséget.");
+                return;
             }
 
-            LoadAlapanyagList();
-            LoadAlapanyagComboBox();
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    Console.WriteLine("Adatbázis kapcsolat megnyitva.");
+
+                    var command = connection.CreateCommand();
+                    command.CommandText = "INSERT INTO Alapanyag (alapanyagNev, alapanyagMennyiseg) VALUES (@alapanyagNev, @mennyiseg)";
+                    command.Parameters.AddWithValue("@alapanyagNev", alapanyagNev);
+                    command.Parameters.AddWithValue("@mennyiseg", mennyiseg);
+
+                    int rowsAffected = command.ExecuteNonQuery();
+                    Console.WriteLine($"Érintett sorok száma: {rowsAffected}");
+
+                    if (rowsAffected > 0)
+                    {
+                        MessageBox.Show("Az alapanyag sikeresen hozzáadva az adatbázishoz!");
+                        LoadAlapanyagList(); 
+                    }
+                    else
+                    {
+                        MessageBox.Show("Nem sikerült hozzáadni az alapanyagot az adatbázishoz.");
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"MySQL hiba történt: {ex.Message}\nHibakód: {ex.Number}");
+                Console.WriteLine($"Részletes MySQL hiba: {ex}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Általános hiba történt: {ex.Message}");
+                Console.WriteLine($"Részletes hiba: {ex}");
+            }
+
+
             AlapanyagNevTextBox.Clear();
             AlapanyagMennyisegTextBox.Clear();
+            LoadAlapanyagComboBox();
         }
+
+
         private void LogOut(object sender, RoutedEventArgs e)
 
         {

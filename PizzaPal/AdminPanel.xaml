@@ -303,19 +303,19 @@
                     <StackPanel x:Name="InventoryManagementSection" Visibility="Collapsed">
                         <TextBlock Text="Raktár Kezelése" Style="{StaticResource HeaderStyle}" Margin="0,0,0,15"/>
 
-           
+
                         <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
                             <StackPanel>
                                 <TextBlock Text="Új Alapanyag Hozzáadása" Style="{StaticResource SubHeaderStyle}" Margin="0,0,0,10"/>
                                 <TextBlock Text="Alapanyag Név" Margin="0,0,0,5"/>
                                 <TextBox x:Name="AlapanyagNevTextBox" Style="{StaticResource InputStyle}" />
-                                <TextBlock Text="Mennyiség" Margin="10,10,0,5"/>
+                                <TextBlock Text="Mennyiség" Margin="0,10,0,5"/>
                                 <TextBox x:Name="AlapanyagMennyisegTextBox" Style="{StaticResource InputStyle}" />
                                 <Button Content="Hozzáadás" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Margin="0,15,0,0" Click="AddAlapanyag_Click"/>
                             </StackPanel>
                         </Border>
 
-            
+
                         <Border Style="{StaticResource CardStyle}">
                             <StackPanel>
                                 <TextBlock Text="Alapanyag Lista" Style="{StaticResource SubHeaderStyle}" Margin="0,0,0,10"/>
