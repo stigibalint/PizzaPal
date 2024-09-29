@@ -2,7 +2,7 @@ name: dokumentacio
 on:
   push:
     branches:
-      - mai
+      - main
     paths:
       - 'dokumentacio/**'
 concurrency:
