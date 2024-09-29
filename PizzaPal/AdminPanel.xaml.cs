@@ -29,21 +29,115 @@ namespace PizzaPal
         {
             PizzaManagementSection.Visibility = Visibility.Visible;
             InventoryManagementSection.Visibility = Visibility.Collapsed;
-            UserManagementSection.Visibility = Visibility.Collapsed;
+
+       
+
         }
 
         private void UserManagement_Click(object sender, RoutedEventArgs e)
         {
             PizzaManagementSection.Visibility = Visibility.Collapsed;
             InventoryManagementSection.Visibility = Visibility.Collapsed;
-            UserManagementSection.Visibility = Visibility.Visible;
+
+          
+
         }
 
         private void InventoryManagement_Click(object sender, RoutedEventArgs e)
         {
             PizzaManagementSection.Visibility = Visibility.Collapsed;
             InventoryManagementSection.Visibility = Visibility.Visible;
-            UserManagementSection.Visibility = Visibility.Collapsed;
+
+   
+        }
+
+        private void FrissitesButton_Click(object sender, RoutedEventArgs e)
+        {
+            var alapanyagok = AlapanyagList.ItemsSource as List<Alapanyag>;
+            if (alapanyagok == null) return;
+
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var alapanyag in alapanyagok)
+                        {
+                            var command = connection.CreateCommand();
+                            command.Transaction = transaction;
+                            command.CommandText = "UPDATE Alapanyag SET alapanyagNev = @nev, alapanyagMennyiseg = @mennyiseg WHERE alapanyagId = @id";
+                            command.Parameters.AddWithValue("@nev", alapanyag.AlapanyagNev);
+                            command.Parameters.AddWithValue("@mennyiseg", alapanyag.AlapanyagMennyiseg);
+                            command.Parameters.AddWithValue("@id", alapanyag.AlapanyagId);
+                            command.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                        MessageBox.Show("Az alapanyagok sikeresen frissítve!");
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show($"Hiba történt a frissítés során: {ex.Message}");
+                    }
+                }
+            }
+
+            LoadAlapanyagList();
+        }
+
+        private void DeleteAlapanyag_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button?.DataContext is Alapanyag alapanyag)
+            {
+                var result = MessageBox.Show($"Biztosan törölni szeretné a(z) {alapanyag.AlapanyagNev} alapanyagot? Ez eltávolítja az összes pizzát, ami tartalmazza ezt az alapanyagot.", "Törlés megerősítése", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    using (var connection = new MySqlConnection(connectionString))
+                    {
+                        connection.Open();
+                        using (var transaction = connection.BeginTransaction())
+                        {
+                            try
+                            {
+                                var command = connection.CreateCommand();
+                                command.Transaction = transaction;
+
+                               
+                                command.CommandText = "DELETE FROM PizzaAlapanyag WHERE alapanyagId = @id";
+                                command.Parameters.AddWithValue("@id", alapanyag.AlapanyagId);
+                                command.ExecuteNonQuery();
+
+               
+                                command.CommandText = "DELETE FROM Alapanyag WHERE alapanyagId = @id";
+                                int rowsAffected = command.ExecuteNonQuery();
+
+                                if (rowsAffected > 0)
+                                {
+                                    transaction.Commit();
+                                    MessageBox.Show("Az alapanyag és a kapcsolódó pizza összetevők sikeresen törölve!");
+                                    LoadAlapanyagList();
+                                    LoadPizzaList(); 
+                                }
+                                else
+                                {
+                                    transaction.Rollback();
+                                    MessageBox.Show("Nem sikerült törölni az alapanyagot.");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                transaction.Rollback();
+                                MessageBox.Show($"Hiba történt a törlés során: {ex.Message}");
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void LoadAlapanyagList()
@@ -67,6 +161,7 @@ namespace PizzaPal
                 AlapanyagList.ItemsSource = alapanyagList;
             }
         }
+
 
         private void LoadAlapanyagComboBox()
         {
@@ -359,6 +454,7 @@ namespace PizzaPal
                 PizzaDataGrid.ItemsSource = pizzaList;
             }
         }
+
         private void DeletePizza_Click(object sender, RoutedEventArgs e)
         {
             var pizza = ((Button)sender).DataContext as Pizza;

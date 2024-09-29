@@ -2,16 +2,20 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+
 using System.Windows.Media.Imaging;
 using FontAwesome.WPF;
 using MySql.Data.MySqlClient;
 using static PizzaPal.AdminPanel;
+
+
 
 namespace PizzaPal
 {
     public partial class OrderWindow : Window
     {
         private string _userName;
+
         public string Id;
         private string connectionString = "Server=localhost;Database=PizzaPalDB;Uid=root;Pwd=;";
         public List<Pizza> _Pizzak;
@@ -30,6 +34,15 @@ namespace PizzaPal
             InitializeComponent();
             CreateDatabase();
             LoadPizzas();
+
+        public string UserName
+        {
+            get { return _userName; }
+            set
+            {
+                _userName = value;
+                UpdateUserInterface();
+            }
         }
         private void CreateDatabase()
         {
@@ -133,7 +146,7 @@ namespace PizzaPal
         {
             foreach (var pizza in _Pizzak)
             {
-                // Fetch ingredients and set to Alapanyagok property
+                
                 pizza.Alapanyagok = GetPizzaIngredients(pizza.PizzaId);
 
                 var pizzaCard = CreatePizzaCard(pizza);
@@ -196,7 +209,7 @@ namespace PizzaPal
             border.Child = stackPanel;
 
             return border;
-        }
+
 
 
 

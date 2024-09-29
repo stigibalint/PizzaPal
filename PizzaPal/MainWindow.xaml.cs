@@ -17,8 +17,8 @@ namespace PizzaPal
             InitializeComponent();
         }
 
-        
 
+        
         private void ActionButton_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameTXT.Text;
@@ -100,6 +100,7 @@ namespace PizzaPal
             {
                 connection.Open();
                 try
+
                 {
                     var command = connection.CreateCommand();
                     string hashedPassword = HashPassword(username, password);
@@ -109,6 +110,7 @@ namespace PizzaPal
                     command.Parameters.AddWithValue("@email", email);
                     command.ExecuteNonQuery();
                     return true;
+
                 }
                 catch (MySqlException ex)
                 {
@@ -124,6 +126,8 @@ namespace PizzaPal
                 this.DragMove();
             }
         }
+
+
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
