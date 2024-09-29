@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using FontAwesome.WPF;
 using MySql.Data.MySqlClient;
+using static PizzaPal.AdminPanel;
 
 namespace PizzaPal
 {
@@ -29,10 +31,8 @@ namespace PizzaPal
             CreateDatabase();
             LoadPizzas();
         }
-
         private void CreateDatabase()
         {
-
             using (var connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
@@ -78,11 +78,8 @@ namespace PizzaPal
                         FOREIGN KEY (pizzaId) REFERENCES Pizza(pizzaId)
                     );";
                 command.ExecuteNonQuery();
-
             }
-        
         }
-
         private void LoadPizzas()
         {
             _Pizzak = new List<Pizza>();
@@ -109,7 +106,6 @@ namespace PizzaPal
 
             PopulatePizzaCards();
         }
-
         private void PopulatePizzaCards()
         {
             foreach (var pizza in _Pizzak)
@@ -118,7 +114,6 @@ namespace PizzaPal
                 wpPizzak.Children.Add(pizzaCard);
             }
         }
-
         private UIElement CreatePizzaCard(Pizza pizza)
         {
             var border = new Border
@@ -127,7 +122,7 @@ namespace PizzaPal
                 Padding = new Thickness(10)
             };
 
-            var stackPanel = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center };
+            var stackPanel = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment =VerticalAlignment.Center };
 
             var image = new Image
             {
@@ -166,6 +161,7 @@ namespace PizzaPal
             return border;
         }
 
+
         private void UpdateUserInterface()
         {
             if (!string.IsNullOrEmpty(_userName))
@@ -182,6 +178,17 @@ namespace PizzaPal
                 var iconElement = (ImageAwesome)parentStackPanel.Children[0];
                
             }
+        }
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.DragMove();
+            }
+        }
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
 
         private void btnProfil(object sender, RoutedEventArgs e)
