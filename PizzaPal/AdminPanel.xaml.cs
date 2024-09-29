@@ -359,6 +359,7 @@ namespace PizzaPal
                 PizzaDataGrid.ItemsSource = pizzaList;
             }
         }
+        
         private void DeletePizza_Click(object sender, RoutedEventArgs e)
         {
             var pizza = ((Button)sender).DataContext as Pizza;

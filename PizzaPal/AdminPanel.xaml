@@ -71,32 +71,41 @@
             <Setter Property="Margin" Value="0,7,0,20"/>
             <Setter Property="Height" Value="45"/>
         </Style>
+      
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"></Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="Black"/>
+                
+                </Trigger>
+            </Style.Triggers>
         </Style>
         <Style x:Key="ButtonStyle2" TargetType="Button">
-            <Setter Property="Foreground" Value="red"/>
-            
+            <Setter Property="Foreground" Value="DarkRed"/>
+            <Setter Property="Background" Value="Transparent"/>
+         
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
-             Padding="{TemplateBinding Padding}"
-             BorderThickness="{TemplateBinding BorderThickness}"
-             BorderBrush="{TemplateBinding BorderBrush}">
+                        Padding="{TemplateBinding Padding}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="Black"/>
-                    <Setter Property="Background" Value="Red"/>
-
                 </Trigger>
             </Style.Triggers>
         </Style>
+
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#d40404"/>
             <Setter Property="Foreground" Value="White"/>
@@ -153,8 +162,8 @@
                     <GradientStop Color="#a00000" Offset="1"/>
                 </LinearGradientBrush>
             </Border.Background>
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" >
-                <fa:ImageAwesome Icon="User" Height="40" Width="40" Foreground="White" Margin="30"/>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <fa:ImageAwesome Icon="User" Height="40" Width="40" Foreground="White" Margin="30"/>
                 <TextBlock Text="Admin" FontSize="20" FontWeight="Bold" Foreground="White" Margin="0,-30,0,30" HorizontalAlignment="Center"/>
 
                     <Button Click="PizzaManagement_Click" Margin="10,5" Background="Transparent" Foreground="White" BorderThickness="0" FontSize="22" HorizontalAlignment="Left"  Style="{StaticResource ButtonStyle2}">
@@ -187,7 +196,7 @@
 
                 <Button  Background="Transparent" Foreground="White" BorderThickness="0" FontSize="18" HorizontalAlignment="Center"  Style="{StaticResource ButtonStyle2}" Click="LogOut">
                 <StackPanel Orientation="Horizontal">
-                    <fa:ImageAwesome Icon="SignOut" Height="26" Width="26" Foreground="White" Margin="0,0,5,0"/>
+                        <fa:ImageAwesome Icon="SignOut" Height="26" Width="26" Foreground="White" Margin="0,0,5,0"/>
                     <TextBlock Text="Kijelentkezés" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
@@ -195,12 +204,18 @@
             <Border Background="Transparent" Height="50" VerticalAlignment="Top" Grid.Column="2">
                 <Grid>
                     <Button Width="40" Height="40" HorizontalAlignment="Right" VerticalAlignment="Center"
-              Margin="0,0,10,0" Background="Transparent" Foreground="DarkRed" BorderThickness="0"
-              FontSize="30" FontWeight="Bold" Click="Close_Click" Style="{StaticResource ButtonStyle2}" FontFamily="Aharoni" >
+                Margin="0,0,10,0" 
+                Click="Close_Click"
+                Style="{StaticResource ButtonStyle2}" 
+                FontFamily="Aharoni" 
+                FontSize="30" 
+                FontWeight="Bold"
+                            BorderThickness="0">
                         X
                     </Button>
                 </Grid>
             </Border>
+
             <ScrollViewer Grid.Column="1" Margin="40">
             
             <StackPanel x:Name="MainContent">
@@ -225,16 +240,15 @@
                                 <Button Content="Mentés" Style="{StaticResource ButtonStyle}" HorizontalAlignment="Left" Click="SavePizza_Click" Margin="0,25,0,0"/>
                             </StackPanel>
 
-                            <Button Grid.Column="1" Background="#F4F4F4" Margin="20,0,0,0" Click="UploadPizzaImage_Click"  >
-                                <Border Grid.Column="1" Background="#F4F4F4" CornerRadius="4" Margin="10,0,0,0" >
-                                    <Grid>
-                                        <TextBlock Text="Kép feltöltése" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#777777"  FontSize="20"/>
-                                        <fa:ImageAwesome Icon="Upload" Height="40" Width="40" Foreground="#777777" Margin="16,69,16,0" VerticalAlignment="Top"/>
-
-                                    </Grid>
-                                </Border>
-                            </Button>
-                        </Grid>
+                                <Button Grid.Column="1" Background="#F4F4F4" Margin="20,0,0,0" Click="UploadPizzaImage_Click">
+                                    <Border Background="#F4F4F4" CornerRadius="4" Margin="10,0,0,0">
+                                        <Grid>
+                                            <TextBlock Text="Kép feltöltése" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#777777" FontSize="20"/>
+                                            <fa:ImageAwesome Icon="Upload" Height="40" Width="40" Foreground="#777777" Margin="16,69,16,0" VerticalAlignment="Top" />
+                                        </Grid>
+                                    </Border>
+                                </Button>
+                            </Grid>
                     </Border>
                         <TextBlock Text="Pizzák Kezelése" Style="{StaticResource HeaderStyle}"/>
                         <ScrollViewer>
