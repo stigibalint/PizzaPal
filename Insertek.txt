@@ -1,0 +1,129 @@
+CREATE DATABASE PizzaPalDB DEFAULT CHARACTER SET utf8 COLLATE utf8_hungarian_ci;
+
+CREATE TABLE IF NOT EXISTS Felhasznalok (
+    felhasznaloId INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    Jogosultsag ENUM('admin', 'user') NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Pizza (
+    pizzaId INT PRIMARY KEY AUTO_INCREMENT,
+    pizzaNev VARCHAR(255) NOT NULL,
+    egysegAr INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Alapanyag (
+    alapanyagId INT PRIMARY KEY AUTO_INCREMENT,
+    alapanyagNev VARCHAR(255) NOT NULL,
+    alapanyagMennyiseg INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS PizzaAlapanyag (
+    pizzaId INT,
+    alapanyagId INT,
+    mennyiseg INT NOT NULL,
+    PRIMARY KEY (pizzaId, alapanyagId),
+    FOREIGN KEY (pizzaId) REFERENCES Pizza(pizzaId),
+    FOREIGN KEY (alapanyagId) REFERENCES Alapanyag(alapanyagId)
+);
+
+CREATE TABLE IF NOT EXISTS Rendeles (
+    rendelesId INT PRIMARY KEY AUTO_INCREMENT,
+    felhasznaloId INT,
+    pizzaId INT,
+    mennyiseg INT NOT NULL,
+    datum DATE NOT NULL,
+    cim VARCHAR(255) NOT NULL,
+    FOREIGN KEY (felhasznaloId) REFERENCES Felhasznalok(felhasznaloId),
+    FOREIGN KEY (pizzaId) REFERENCES Pizza(pizzaId)
+);
+
+
+INSERT INTO Pizza (pizzaNev, egysegAr)
+VALUES
+( 'Margherita', 3300),
+( 'Hawaii', 3500),
+( 'Magyaros', 3900),
+( 'Dallas', 3500),
+('Sonkás-Kukoricás', 3500),
+('Carbonara', 3700),
+( 'SokSajtos', 3700),
+('Texas', 3700),
+('Szuprém', 3700);
+
+INSERT INTO Alapanyag (alapanyagNev, alapanyagMennyiseg)
+VALUES
+( 'Paradicsomszósz', 100),
+( 'Mozzarella', 50),
+( 'Pepperoni', 30),
+( 'Sonka', 30),
+( 'Kukorica', 30),
+( 'Ananász', 30),
+('Bacon', 30),
+('Olaszkolbász', 30),
+('Lilahagyma', 30),
+( 'Marhahús', 30);
+
+INSERT INTO PizzaAlapanyag (pizzaId, alapanyagId, mennyiseg)
+VALUES
+-- Margherita
+(1, 1, 50),  -- Paradicsomszósz
+(1, 2, 30),  -- Mozzarella
+
+-- Hawaii
+(2, 1, 50),  -- Paradicsomszósz
+(2, 2, 30),  -- Mozzarella
+(2, 6, 20),  -- Ananász
+(2, 4, 20),  -- Sonka
+
+-- Magyaros
+(3, 1, 50),  -- Paradicsomszósz
+(3, 2, 30),  -- Mozzarella
+(3, 8, 20),  -- Olaszkolbász
+(3, 9, 15),  -- Lilahagyma
+
+-- Dallas
+(4, 1, 50),  -- Paradicsomszósz
+(4, 2, 30),  -- Mozzarella
+(4, 7, 20),  -- Bacon
+(4, 10, 25), -- Marhahús
+
+-- Sonkás-Kukoricás
+(5, 1, 50),  -- Paradicsomszósz
+(5, 2, 30),  -- Mozzarella
+(5, 4, 20),  -- Sonka
+(5, 5, 20),  -- Kukorica
+
+-- Carbonara
+(6, 2, 30),  -- Mozzarella
+(6, 7, 20),  -- Bacon
+(6, 10, 25), -- Marhahús
+
+-- SokSajtos
+(7, 2, 50),  -- Mozzarella
+
+-- Texas
+(8, 1, 50),  -- Paradicsomszósz
+(8, 2, 30),  -- Mozzarella
+(8, 7, 20),  -- Bacon
+(8, 10, 25), -- Marhahús
+
+-- Szuprém
+(9, 1, 50),  -- Paradicsomszósz
+(9, 2, 30),  -- Mozzarella
+(9, 3, 20),  -- Pepperoni
+(9, 4, 20),  -- Sonka
+(9, 5, 20),  -- Kukorica
+(9, 9, 15);  -- Lilahagyma
+
+INSERT INTO felhasznalok ( username, password, email, Jogosultsag)
+VALUES
+( 'admin_user1', 'adminpass1', 'admin1@example.com', 'admin'),
+( 'admin_user2', 'adminpass2', 'admin2@example.com', 'admin'),
+( 'default_user1', 'userpass1', 'user1@example.com', 'user'),
+('default_user2', 'userpass2', 'user2@example.com',' user');
+
+
+
