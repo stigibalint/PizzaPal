@@ -1,5 +1,5 @@
 site_name: PizzaPál docs
-site_url: 'https://stigibalint.github.io/PizzaPal'
+site_url: 'https://stigibalint.github.io/PizzaPal/'
 
 nav:
   - Kezdőlap: 'index.md'
