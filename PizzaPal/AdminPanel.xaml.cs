@@ -29,20 +29,25 @@ namespace PizzaPal
         {
             PizzaManagementSection.Visibility = Visibility.Visible;
             InventoryManagementSection.Visibility = Visibility.Collapsed;
+
        
+
         }
 
         private void UserManagement_Click(object sender, RoutedEventArgs e)
         {
             PizzaManagementSection.Visibility = Visibility.Collapsed;
             InventoryManagementSection.Visibility = Visibility.Collapsed;
+
           
+
         }
 
         private void InventoryManagement_Click(object sender, RoutedEventArgs e)
         {
             PizzaManagementSection.Visibility = Visibility.Collapsed;
             InventoryManagementSection.Visibility = Visibility.Visible;
+
    
         }
 
@@ -134,6 +139,7 @@ namespace PizzaPal
                 }
             }
         }
+
         private void LoadAlapanyagList()
         {
             using (var connection = new MySqlConnection(connectionString))
@@ -303,14 +309,19 @@ namespace PizzaPal
             if (openFileDialog.ShowDialog() == true)
             {
                 var fileName = Path.GetFileName(openFileDialog.FileName);
-                var destPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "uploads", fileName);
 
-                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "uploads"));
+         
+                var projectPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\.."));
+                var destPath = Path.Combine(projectPath, "Images", fileName);
+
+             
+                Directory.CreateDirectory(Path.Combine(projectPath, "Images"));
                 File.Copy(openFileDialog.FileName, destPath, true);
 
-                MessageBox.Show("Kép sikeresen feltöltve!");
+                MessageBox.Show("Kép sikeresen feltöltve az Images mappába a projekt gyökérmappájában!");
             }
         }
+
 
         private void AddAlapanyag_Click(object sender, RoutedEventArgs e)
         {
@@ -448,7 +459,7 @@ namespace PizzaPal
                 PizzaDataGrid.ItemsSource = pizzaList;
             }
         }
-        
+
         private void DeletePizza_Click(object sender, RoutedEventArgs e)
         {
             var pizza = ((Button)sender).DataContext as Pizza;
