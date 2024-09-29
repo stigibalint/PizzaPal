@@ -1,7 +1,9 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Input;
 
 namespace PizzaPal
 {
@@ -71,6 +73,26 @@ namespace PizzaPal
             string username = UsernameTXT.Text;
             string password = Password.Password;
 
+   
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                MessageBox.Show("Kérlek, töltsd ki a felhasználónevet és a jelszót.");
+                return;
+            }
+
+      
+            if (username.Length < 5)
+            {
+                MessageBox.Show("A felhasználónévnek legalább 5 karakter hosszúnak kell lennie.");
+                return;
+            }
+
+            if (password.Length < 5)
+            {
+                MessageBox.Show("A jelszónak legalább 5 karakter hosszúnak kell lennie.");
+                return;
+            }
+
             if (isLogin)
             {
                 string jogosultsag = LoginUser(username, password);
@@ -86,12 +108,13 @@ namespace PizzaPal
                     }
                     else
                     {
+
                         OrderWindow orderWindow = new OrderWindow();
                         orderWindow.UserName = username;
                         orderWindow.Show();
                     }
 
-                    this.Close(); 
+                    this.Close();
                 }
                 else
                 {
@@ -101,6 +124,14 @@ namespace PizzaPal
             else
             {
                 string email = EmailTextBox.Text;
+
+             
+                if (!IsValidEmail(email))
+                {
+                    MessageBox.Show("Érvénytelen email cím.");
+                    return;
+                }
+
                 if (RegisterUser(username, email, password))
                 {
                     MessageBox.Show("Regisztráció sikeres!");
@@ -111,7 +142,6 @@ namespace PizzaPal
                 }
             }
         }
-
 
         private bool RegisterUser(string username, string email, string password)
         {
@@ -136,6 +166,17 @@ namespace PizzaPal
                 }
             }
         }
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.DragMove();
+            }
+        }
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
 
         private string LoginUser(string username, string password)
         {
@@ -156,14 +197,13 @@ namespace PizzaPal
 
                         if (storedHashedPassword == hashedInputPassword)
                         {
-                            return jogosultsag; 
+                            return jogosultsag;
                         }
                     }
                 }
             }
-            return null; 
+            return null;
         }
-
 
         private string HashPassword(string username, string password)
         {
@@ -178,6 +218,11 @@ namespace PizzaPal
                 byte[] hashBytes = sha256.ComputeHash(combinedBytes);
                 return Convert.ToBase64String(hashBytes);
             }
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         }
 
         private void ToggleButton_Click(object sender, RoutedEventArgs e)

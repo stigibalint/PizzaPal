@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using FontAwesome.WPF;
 
 namespace PizzaPal
@@ -39,6 +40,17 @@ namespace PizzaPal
                 var iconElement = (ImageAwesome)parentStackPanel.Children[0];
                
             }
+        }
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.DragMove();
+            }
+        }
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
 
         private void btnProfil(object sender, RoutedEventArgs e)
