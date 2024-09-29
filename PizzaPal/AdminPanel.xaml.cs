@@ -29,20 +29,25 @@ namespace PizzaPal
         {
             PizzaManagementSection.Visibility = Visibility.Visible;
             InventoryManagementSection.Visibility = Visibility.Collapsed;
+
        
+
         }
 
         private void UserManagement_Click(object sender, RoutedEventArgs e)
         {
             PizzaManagementSection.Visibility = Visibility.Collapsed;
             InventoryManagementSection.Visibility = Visibility.Collapsed;
+
           
+
         }
 
         private void InventoryManagement_Click(object sender, RoutedEventArgs e)
         {
             PizzaManagementSection.Visibility = Visibility.Collapsed;
             InventoryManagementSection.Visibility = Visibility.Visible;
+
    
         }
 
@@ -134,6 +139,7 @@ namespace PizzaPal
                 }
             }
         }
+
         private void LoadAlapanyagList()
         {
             using (var connection = new MySqlConnection(connectionString))
@@ -448,7 +454,7 @@ namespace PizzaPal
                 PizzaDataGrid.ItemsSource = pizzaList;
             }
         }
-        
+
         private void DeletePizza_Click(object sender, RoutedEventArgs e)
         {
             var pizza = ((Button)sender).DataContext as Pizza;

@@ -68,6 +68,12 @@
             <Setter Property="Foreground" Value="#E21B22"/>
             <Setter Property="Margin" Value="5,0,5,10"/>
         </Style>
+        <Style x:Key="PizzaIngredientsStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
         <Style x:Key="AddToCartButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#E21B22"/>
             <Setter Property="Foreground" Value="White"/>
@@ -114,6 +120,7 @@
                                  BorderBrush="#D1D1D1" BorderThickness="1" VerticalContentAlignment="Center"/>
                             </StackPanel>
 
+
                        
                             <StackPanel Margin="0,0,0,20">
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
@@ -123,6 +130,7 @@
                                 <TextBox Height="45" FontSize="16" Padding="10,5" Background="#FFFFFF"
                                  BorderBrush="#D1D1D1" BorderThickness="1" VerticalContentAlignment="Center"/>
                             </StackPanel>
+
 
                 
                             <StackPanel Margin="0,0,0,20">
@@ -200,6 +208,7 @@
                         <Border Background="Transparent" Height="50" VerticalAlignment="Top" Grid.Column="2">
                             <Grid>
                                 <Button Width="40" Height="40" HorizontalAlignment="Right" VerticalAlignment="Center"
+
                 Margin="0,-10,-20,0" 
                 Click="Close_Click"
                 BorderThickness="0"
@@ -213,6 +222,7 @@
                             </Grid>
                         </Border>
 
+
                     </StackPanel>
             </Grid>
         </Border>
@@ -225,40 +235,12 @@
         <Border BorderBrush="#CCCCCC"  Grid.Row="2"  BorderThickness="0,3,0,0" Margin="0,10,0,0" Width="850"/>
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,20,0,0" x:Name="PizzaList">
-            
-            <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top">
-             
-                <Border Style="{StaticResource PizzaCardStyle}" Padding="10">
-                    <StackPanel HorizontalAlignment="Center">
-                        <Image Style="{StaticResource PizzaImageStyle}" Source="Images/margarita.jpg"/>
-                        <TextBlock Text="Margherita" Style="{StaticResource PizzaNameStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Paradicsom alap, mozzarella, bazsalikom" Style="{StaticResource PizzaDescriptionStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Text="1990 Ft" Style="{StaticResource PizzaPriceStyle}" HorizontalAlignment="Center"/>
-                        <Button Content="Kosárba" Style="{StaticResource AddToCartButtonStyle}" HorizontalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource PizzaCardStyle}" Padding="10">
-                    <StackPanel HorizontalAlignment="Center">
-                        <Image Style="{StaticResource PizzaImageStyle}" Source="Images/margarita.jpg"/>
-                        <TextBlock Text="Margherita" Style="{StaticResource PizzaNameStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Paradicsom alap, mozzarella, bazsalikom" Style="{StaticResource PizzaDescriptionStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Text="1990 Ft" Style="{StaticResource PizzaPriceStyle}" HorizontalAlignment="Center"/>
-                        <Button Content="Kosárba" Style="{StaticResource AddToCartButtonStyle}" HorizontalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
 
 
-                <Border Style="{StaticResource PizzaCardStyle}" Padding="10">
-                    <StackPanel HorizontalAlignment="Center">
-                        <Image Style="{StaticResource PizzaImageStyle}" Source="Images/margarita.jpg"/>
-                        <TextBlock Text="Margherita" Style="{StaticResource PizzaNameStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Paradicsom alap, mozzarella, bazsalikom" Style="{StaticResource PizzaDescriptionStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Text="1990 Ft" Style="{StaticResource PizzaPriceStyle}" HorizontalAlignment="Center"/>
-                        <Button Content="Kosárba" Style="{StaticResource AddToCartButtonStyle}" HorizontalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-            </WrapPanel>
-        </ScrollViewer>
+                <WrapPanel x:Name="wpPizzak" HorizontalAlignment="Center" VerticalAlignment="Top">
+                   
+                </WrapPanel>
+            </ScrollViewer>
 
    
         <Border Background="#E21B22" Grid.Row="3" Height="60">
