@@ -191,10 +191,13 @@
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="ShoppingCart" Height="18" Width="18" Margin="0,0,0,0" Foreground="White"/>
                             <TextBlock Text="0" Margin="0 5 2 5" Visibility="Hidden"></TextBlock>
-                            <Button Background="Transparent" Foreground="white" Click="shorCart" BorderThickness="0">
+                            <Button Background="Transparent" Foreground="white"  BorderThickness="0" Click="CartPage">
                                 <TextBlock Text="Kosár" VerticalAlignment="Center"/>
-                            </Button>
-                        </StackPanel>
+                                   
+                                </Button>
+                                <TextBlock x:Name="cartItemCountTextBlock" Text="0" Margin="0 5 2 5" Visibility="Hidden"/>
+
+                            </StackPanel>
                     </Button>
                     <Button Style="{StaticResource NavButtonStyle}" Click="btnProfil" Background="Transparent">
                         <StackPanel Orientation="Horizontal">
@@ -221,29 +224,65 @@
                                 </Button>
                             </Grid>
                         </Border>
-
-
                     </StackPanel>
             </Grid>
         </Border>
 
-     
-        <Border Grid.Row="1" Background="Transparent" Opacity="0.9">
-            <Image Source="Images/header2.jpg" Stretch="Fill" Height="200"/>
+            <Border Grid.Row="1" Background="Transparent" Opacity="0.9" x:Name="HeaderSection" Visibility="Visible">
+                <Image Source="Images/header3.jpg" Stretch="Fill" Height="200"/>
             
         </Border>
         <Border BorderBrush="#CCCCCC"  Grid.Row="2"  BorderThickness="0,3,0,0" Margin="0,10,0,0" Width="850"/>
 
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,20,0,0" x:Name="PizzaList">
+
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,20,0,0" x:Name="PizzaList"  Visibility="Visible">
 
 
-                <WrapPanel x:Name="wpPizzak" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <WrapPanel x:Name="wpPizzak" HorizontalAlignment="Center" VerticalAlignment="Top" >
                    
                 </WrapPanel>
+            
             </ScrollViewer>
 
-   
-        <Border Background="#E21B22" Grid.Row="3" Height="60">
+
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,20,0,0" x:Name="CartSection" Visibility="Collapsed">
+                <Grid x:Name="CartGrid" Background="White" Margin="50">
+                    <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="10" Padding="20">
+                        <StackPanel>
+                            <TextBlock Text="Kosár Tartalma" FontSize="32" FontWeight="Bold" Foreground="#E21B22" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+
+                            <StackPanel x:Name="CartItemsPanel" Margin="0,10">
+                             
+                            </StackPanel>
+
+                            <StackPanel Margin="30,20,30,0" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="Összesen:" FontSize="24" FontWeight="Bold" Foreground="#333" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="TotalPriceText" Text="0 Ft" FontSize="24" FontWeight="Bold" Foreground="#E21B22" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                                <Button Content="Vissza a Pizzákhoz" Width="180" Height="50" FontSize="16" FontWeight="Bold" Background="#555" Foreground="White" BorderThickness="0" Margin="0,0,10,0" Click="BackToPizzaList_Click">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="25"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                                <Button Content="Fizetés" Width="180" Height="50" FontSize="16" FontWeight="Bold" Background="#E21B22" Foreground="White" BorderThickness="0">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="25"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </ScrollViewer>
+
+
+            <Border Background="#E21B22" Grid.Row="3" Height="60">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

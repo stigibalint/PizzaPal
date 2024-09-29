@@ -10,18 +10,12 @@
     <Compile Update="AdminPanel.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Cart.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="OrderWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="AdminPanel.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Cart.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">

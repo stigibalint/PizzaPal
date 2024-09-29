@@ -2,11 +2,13 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
+using System.Media;
 using System.Windows.Media.Imaging;
 using FontAwesome.WPF;
 using MySql.Data.MySqlClient;
 using static PizzaPal.AdminPanel;
+using System.Windows.Media.Effects;
+using System.Windows.Media;
 
 
 
@@ -15,7 +17,9 @@ namespace PizzaPal
     public partial class OrderWindow : Window
     {
         private string _userName;
+        private List<CartItem> _cartItems = new List<CartItem>();
 
+        private int _totalPrice = 0;
         public string Id;
         private string connectionString = "Server=localhost;Database=PizzaPalDB;Uid=root;Pwd=;";
         public List<Pizza> _Pizzak;
@@ -25,7 +29,8 @@ namespace PizzaPal
             set
             {
                 _userName = value;
-               // UpdateUserInterface();
+                UpdateUserInterface();
+              
             }
         }
 
@@ -192,7 +197,7 @@ namespace PizzaPal
                 Style = (Style)FindResource("AddToCartButtonStyle"),
                 HorizontalAlignment = HorizontalAlignment.Center
             };
-
+            addToCartButton.Click += (s, e) => AddToCart(pizza);
             stackPanel.Children.Add(image);
             stackPanel.Children.Add(nameTextBlock);
             stackPanel.Children.Add(priceTextBlock);
@@ -204,9 +209,150 @@ namespace PizzaPal
             return border;
         }
 
+        private void UpdateCart()
+        {
+            CartItemsPanel.Children.Clear();
+            _totalPrice = 0;
+
+            int totalQuantity = 0;
+
+            foreach (var cartItem in _cartItems)
+            {
+                var cardBorder = new Border
+                {
+                    Margin = new Thickness(5),
+                    Padding = new Thickness(5),
+                    CornerRadius = new CornerRadius(8),
+                    BorderBrush = new SolidColorBrush(Colors.LightGray),
+                    BorderThickness = new Thickness(1),
+                    Background = new SolidColorBrush(Colors.White)
+                };
+
+        
+                var cardGrid = new Grid
+                {
+                    Margin = new Thickness(0),
+                    RowDefinitions =
+            {
+                new RowDefinition { Height = GridLength.Auto }
+            },
+                    ColumnDefinitions =
+            {
+                new ColumnDefinition { Width = new GridLength(100) }, 
+                new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }, 
+                new ColumnDefinition { Width = new GridLength(120) } 
+            }
+                };
+
+                var image = new Image
+                {
+                    Source = new BitmapImage(new Uri($"Images/{cartItem.Pizza.PizzaNev.ToLower()}.jpg", UriKind.Relative)),
+                    Height = 100,
+                    Width = 100,
+                    Stretch = Stretch.UniformToFill,
+                    Margin = new Thickness(0, 0, 10, 0)
+                };
+
+                var detailsStackPanel = new StackPanel
+                {
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(10, 0, 10, 0)
+                };
+
+         
+                var pizzaNameTextBlock = new TextBlock
+                {
+                    Text = $"{cartItem.Pizza.PizzaNev} x {cartItem.Quantity}",
+                    FontSize = 18, 
+                    FontWeight = FontWeights.Bold,
+                };
+
+           
+                var ingredientsTextBlock = new TextBlock
+                {
+                    Text = $"Alapanyagok: {cartItem.Pizza.Alapanyagok}",
+                    FontSize = 14,
+                    TextWrapping = TextWrapping.Wrap
+                };
+
+               
+                var removeButton = new Button
+                {
+                    Content = "Eltávolítás",
+                    Margin = new Thickness(5),
+                    Width = 120,
+                    Height = 35, 
+                    Background = new SolidColorBrush(Color.FromRgb(226, 27, 34)),
+                    Foreground = Brushes.White,
+                    FontWeight = FontWeights.Bold,
+                    Padding = new Thickness(5),
+                    BorderThickness = new Thickness(0),
+                    FontSize = 14 
+                };
+                removeButton.Click += (s, e) => RemoveFromCart(cartItem.Pizza.PizzaId);
+
+               
+                Grid.SetColumn(image, 0);
+                cardGrid.Children.Add(image);
+
+              
+                Grid.SetColumn(detailsStackPanel, 1);
+                detailsStackPanel.Children.Add(pizzaNameTextBlock);
+                detailsStackPanel.Children.Add(ingredientsTextBlock);
+                cardGrid.Children.Add(detailsStackPanel);
+
+              
+                Grid.SetColumn(removeButton, 2);
+                cardGrid.Children.Add(removeButton);
+
+                cardBorder.Child = cardGrid;
+
+                CartItemsPanel.Children.Add(cardBorder);
+
+                _totalPrice += cartItem.Pizza.EgysegAr * cartItem.Quantity;
+                totalQuantity += cartItem.Quantity;
+            }
+
+            TotalPriceText.Text = $"{_totalPrice} Ft";
+
+            var cartItemCountTextBlock = (TextBlock)FindName("cartItemCountTextBlock");
+            cartItemCountTextBlock.Text = totalQuantity.ToString();
+            cartItemCountTextBlock.Visibility = totalQuantity > 0 ? Visibility.Visible : Visibility.Hidden;
+        }
 
 
-            private void UpdateUserInterface()
+        private void AddToCart(Pizza pizza)
+        {
+            var existingItem = _cartItems.FirstOrDefault(ci => ci.Pizza.PizzaId == pizza.PizzaId);
+            if (existingItem != null)
+            {
+                existingItem.Quantity++;
+            }
+            else
+            {
+                _cartItems.Add(new CartItem { Pizza = pizza, Quantity = 1 });
+            }
+            UpdateCart();
+        }
+
+        private void RemoveFromCart(int pizzaId)
+        {
+            var cartItem = _cartItems.FirstOrDefault(ci => ci.Pizza.PizzaId == pizzaId);
+            if (cartItem != null)
+            {
+                if (cartItem.Quantity > 1)
+                {
+                    cartItem.Quantity--;
+                }
+                else
+                {
+                    _cartItems.Remove(cartItem);
+                }
+            }
+            UpdateCart(); 
+        }
+
+        private void UpdateUserInterface()
             {
                 if (!string.IsNullOrEmpty(_userName))
                 {
@@ -230,6 +376,20 @@ namespace PizzaPal
                     this.DragMove();
                 }
             }
+        private void CartPage(object sender, RoutedEventArgs e)
+        {
+            if (UserNameTextBlock.Text != "" && UserNameTextBlock.Text != "Bejelentkezés") {
+                wpPizzak.Visibility = Visibility.Hidden;
+                PizzaList.Visibility = Visibility.Hidden;
+                CartSection.Visibility = Visibility.Visible;
+          
+            }
+            else
+            {
+                MessageBox.Show("Bejelentkezés szükséges!");
+            }
+   
+        }
             private void Close_Click(object sender, RoutedEventArgs e)
             {
                 Application.Current.Shutdown();
@@ -249,16 +409,21 @@ namespace PizzaPal
                     ProfilSzerkesztoGrid.Visibility = Visibility.Visible;
                 }
             }
-            private void BackToPizzaList_Click(object sender, RoutedEventArgs e)
-            {
 
+        private void BackToPizzaList_Click(object sender, RoutedEventArgs e)
+            {
+     
                 PizzaList.Visibility = Visibility.Visible;
+                wpPizzak.Visibility = Visibility.Visible;
+                CartSection.Visibility = Visibility.Hidden;
                 ProfilSzerkesztoGrid.Visibility = Visibility.Hidden;
             }
-            private void shorCart(object sender, RoutedEventArgs e)
-            {
-                Cart popup = new Cart();
-                popup.ShowDialog();
-            }
+          
         }
+    public class CartItem
+    {
+        public Pizza Pizza { get; set; }
+        public int Quantity { get; set; }
     }
+
+}
