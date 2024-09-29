@@ -3,7 +3,7 @@ icon: home
 ---
 # Kezdőlap
 ## Bevezetés
-Ezen a weboldalon a **nullIdk** csapat Fogadási programjának dokumentációja található.
+Ezen a weboldalon a **nullIk** csapat Fogadási programjának dokumentációja található.
 
 A dokumentáció 3 részre tagolható:
 
