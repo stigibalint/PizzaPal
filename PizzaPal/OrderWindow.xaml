@@ -42,6 +42,12 @@
             <Setter Property="Foreground" Value="#E21B22"/>
             <Setter Property="Margin" Value="5,0,5,10"/>
         </Style>
+        <Style x:Key="PizzaIngredientsStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
         <Style x:Key="AddToCartButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#E21B22"/>
             <Setter Property="Foreground" Value="White"/>

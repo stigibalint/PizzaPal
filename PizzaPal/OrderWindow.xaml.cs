@@ -80,6 +80,29 @@ namespace PizzaPal
                 command.ExecuteNonQuery();
             }
         }
+        private string GetPizzaIngredients(int pizzaId)
+        {
+            var ingredients = new List<string>();
+
+
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                var command = new MySqlCommand("SELECT a.alapanyagNev FROM PizzaAlapanyag pa JOIN Alapanyag a ON pa.alapanyagId = a.alapanyagId WHERE pa.pizzaId = @pizzaId", connection);
+                command.Parameters.AddWithValue("@pizzaId", pizzaId);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ingredients.Add(reader["alapanyagNev"].ToString());
+                    }
+                }
+            }
+
+            return string.Join(", ", ingredients); 
+        }
+
         private void LoadPizzas()
         {
             _Pizzak = new List<Pizza>();
@@ -110,10 +133,14 @@ namespace PizzaPal
         {
             foreach (var pizza in _Pizzak)
             {
+                // Fetch ingredients and set to Alapanyagok property
+                pizza.Alapanyagok = GetPizzaIngredients(pizza.PizzaId);
+
                 var pizzaCard = CreatePizzaCard(pizza);
                 wpPizzak.Children.Add(pizzaCard);
             }
         }
+
         private UIElement CreatePizzaCard(Pizza pizza)
         {
             var border = new Border
@@ -122,7 +149,7 @@ namespace PizzaPal
                 Padding = new Thickness(10)
             };
 
-            var stackPanel = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment =VerticalAlignment.Center };
+            var stackPanel = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
 
             var image = new Image
             {
@@ -144,6 +171,15 @@ namespace PizzaPal
                 HorizontalAlignment = HorizontalAlignment.Center
             };
 
+            
+            var ingredientsTextBlock = new TextBlock
+            {
+                Text = pizza.Alapanyagok,
+                Style = (Style)FindResource("PizzaIngredientsStyle"),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                TextWrapping = TextWrapping.Wrap
+            };
+
             var addToCartButton = new Button
             {
                 Content = "Kosárba",
@@ -154,12 +190,14 @@ namespace PizzaPal
             stackPanel.Children.Add(image);
             stackPanel.Children.Add(nameTextBlock);
             stackPanel.Children.Add(priceTextBlock);
+            stackPanel.Children.Add(ingredientsTextBlock); 
             stackPanel.Children.Add(addToCartButton);
 
             border.Child = stackPanel;
 
             return border;
         }
+
 
 
         private void UpdateUserInterface()
