@@ -4,7 +4,7 @@
 
 A PizzaPál projekt tagjai Stiegelmayer Bálint, Orosz Zsombor Olivér és Kecskés Dominik Bálint
 
-**A folyamatok így osztottuk meg**:
+**A folyamatokat így osztottuk meg**:
 - Stiegelmayer Bálint: Frontend, Backend
 - Orosz Zsombor Olivér: Adatbázis, Backend
 - Kecskés Dominik Bálint: Trello kezelés, dokumentáció
