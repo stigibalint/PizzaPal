@@ -105,73 +105,80 @@
         <Grid x:Name="ProfilSzerkesztoGrid" Visibility="Hidden" Background="#F0F0F0" Margin="50" Grid.Row="2">
             <ScrollViewer>
             <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="10" Padding="30" Background="White">
-                <StackPanel>
-                    <TextBlock Text="Profil Szerkesztése" FontSize="32" FontWeight="Bold" Foreground="#E21B22" Margin="0,0,0,30" HorizontalAlignment="Center"/>
-
-                    <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5" Padding="15" Margin="0,0,0,20" Background="#FAFAFA">
                         <StackPanel>
-                
-                            <StackPanel Margin="0,0,0,20">
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                    <fa:ImageAwesome Icon="User" Height="24" Width="24" Foreground="#666"/>
-                                    <TextBlock Text="Felhasználónév" FontWeight="SemiBold" FontSize="18" Foreground="#333" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <TextBox Height="45" FontSize="16" Padding="10,5" Background="#FFFFFF" 
+                            <TextBlock Text="Profil Szerkesztése" FontSize="32" FontWeight="Bold" Foreground="#E21B22" Margin="0,0,0,30" HorizontalAlignment="Center"/>
+
+                            <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5" Padding="15" Margin="0,0,0,20" Background="#FAFAFA">
+                                <StackPanel>
+
+                                    <StackPanel Margin="0,0,0,20">
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                            <fa:ImageAwesome Icon="User" Height="24" Width="24" Foreground="#666"/>
+                                            <TextBlock Text="Felhasználónév" FontWeight="SemiBold" FontSize="18" Foreground="#333" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <TextBox Height="45" FontSize="16" Padding="10,5" Background="#FFFFFF" 
                                  BorderBrush="#D1D1D1" BorderThickness="1" VerticalContentAlignment="Center"/>
-                            </StackPanel>
+                                    </StackPanel>
 
 
-                       
-                            <StackPanel Margin="0,0,0,20">
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                    <fa:ImageAwesome Icon="Envelope" Height="24" Width="24" Foreground="#666"/>
-                                    <TextBlock Text="Email cím" FontWeight="SemiBold" FontSize="18" Foreground="#333" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <TextBox Height="45" FontSize="16" Padding="10,5" Background="#FFFFFF"
+
+                                    <StackPanel Margin="0,0,0,20">
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                            <fa:ImageAwesome Icon="Envelope" Height="24" Width="24" Foreground="#666"/>
+                                            <TextBlock Text="Email cím" FontWeight="SemiBold" FontSize="18" Foreground="#333" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <TextBox Height="45" FontSize="16" Padding="10,5" Background="#FFFFFF"
                                  BorderBrush="#D1D1D1" BorderThickness="1" VerticalContentAlignment="Center"/>
-                            </StackPanel>
+                                    </StackPanel>
 
 
-                
-                            <StackPanel Margin="0,0,0,20">
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                    <fa:ImageAwesome Icon="Lock" Height="24" Width="24" Foreground="#666"/>
-                                    <TextBlock Text="Új Jelszó" FontWeight="SemiBold" FontSize="18" Foreground="#333" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <PasswordBox Height="45" FontSize="16" Padding="10,5" Background="#FFFFFF"
+
+                                    <StackPanel Margin="0,0,0,20">
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                            <fa:ImageAwesome Icon="Lock" Height="24" Width="24" Foreground="#666"/>
+                                            <TextBlock Text="Új Jelszó" FontWeight="SemiBold" FontSize="18" Foreground="#333" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <PasswordBox Height="45" FontSize="16" Padding="10,5" Background="#FFFFFF"
                                      BorderBrush="#D1D1D1" BorderThickness="1" VerticalContentAlignment="Center"/>
-                            </StackPanel>
+                                    </StackPanel>
 
-               
-                            <StackPanel Margin="0,0,0,20">
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                    <fa:ImageAwesome Icon="Lock" Height="24" Width="24" Foreground="#666"/>
-                                    <TextBlock Text="Jelszó megerősítése" FontWeight="SemiBold" FontSize="18" Foreground="#333" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <PasswordBox Height="45" FontSize="16" Padding="10,5" Background="#FFFFFF"
+
+                                    <StackPanel Margin="0,0,0,20">
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                            <fa:ImageAwesome Icon="Lock" Height="24" Width="24" Foreground="#666"/>
+                                            <TextBlock Text="Jelszó megerősítése" FontWeight="SemiBold" FontSize="18" Foreground="#333" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <PasswordBox Height="45" FontSize="16" Padding="10,5" Background="#FFFFFF"
                                      BorderBrush="#D1D1D1" BorderThickness="1" VerticalContentAlignment="Center"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
+                                <Button Content="Mentés" Width="150" Height="50" FontSize="18" FontWeight="Bold" Background="#E21B22" Foreground="White" BorderThickness="0" Margin="0,0,20,0">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="25"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                                <Button Content="Vissza" Width="150" Height="50" FontSize="18" FontWeight="Bold" Background="#555" Foreground="White" BorderThickness="0" Margin="0,0,20,0" Click="BackToPizzaList_Click">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="25"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                                <Button Content="Kijelentkezés" Width="150" Height="50" FontSize="18" FontWeight="Bold" Background="#555" Foreground="White" BorderThickness="0" Margin="0,0,0,0" Click="LogOutUser">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="25"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
                             </StackPanel>
                         </StackPanel>
                     </Border>
-
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
-                        <Button Content="Mentés" Width="150" Height="50" FontSize="18" FontWeight="Bold" Background="#E21B22" Foreground="White" BorderThickness="0" Margin="0,0,20,0">
-                            <Button.Resources>
-                                <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="25"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                        <Button Content="Vissza" Width="150" Height="50" FontSize="18" FontWeight="Bold" Background="#555" Foreground="White" BorderThickness="0" Click="BackToPizzaList_Click">
-                            <Button.Resources>
-                                <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="25"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                    </StackPanel>
-                </StackPanel>
-            </Border>
             </ScrollViewer>
         </Grid>
         <Border Background="#E21B22" Grid.Row="0">

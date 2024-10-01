@@ -18,20 +18,18 @@ namespace PizzaPal
         }
 
 
-        
+
         private void ActionButton_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameTXT.Text;
             string password = Password.Password;
 
-   
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
                 MessageBox.Show("Kérlek, töltsd ki a felhasználónevet és a jelszót.");
                 return;
             }
 
-      
             if (username.Length < 5)
             {
                 MessageBox.Show("A felhasználónévnek legalább 5 karakter hosszúnak kell lennie.");
@@ -59,7 +57,6 @@ namespace PizzaPal
                     }
                     else
                     {
-
                         OrderWindow orderWindow = new OrderWindow();
                         orderWindow.UserName = username;
                         orderWindow.Show();
@@ -76,7 +73,6 @@ namespace PizzaPal
             {
                 string email = EmailTextBox.Text;
 
-             
                 if (!IsValidEmail(email))
                 {
                     MessageBox.Show("Érvénytelen email cím.");
@@ -86,6 +82,18 @@ namespace PizzaPal
                 if (RegisterUser(username, email, password))
                 {
                     MessageBox.Show("Regisztráció sikeres!");
+
+                    
+                    isLogin = true;
+                    HeaderText.Text = "Üdvözlünk! Jelentkezz be a fiókodba.";
+                    ActionButton.Content = "Bejelentkezés";
+                    ToggleButton.Content = "Regisztráció";
+                    EmailStack.Visibility = Visibility.Collapsed;
+                    EmailTextBox.Visibility = Visibility.Collapsed;
+
+                  
+                    Password.Password = "";
+                    EmailTextBox.Text = "";
                 }
                 else
                 {
@@ -93,7 +101,6 @@ namespace PizzaPal
                 }
             }
         }
-
         private bool RegisterUser(string username, string email, string password)
         {
             using (var connection = new MySqlConnection(connectionString))

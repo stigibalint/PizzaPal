@@ -494,13 +494,19 @@ namespace PizzaPal
             {
                 Application.Current.Shutdown();
             }
-
+        private void LogOutUser(object sender, RoutedEventArgs e)
+        {
+            MainWindow loginWindow = new MainWindow();
+            loginWindow.Show();
+            this.Close();
+        }
             private void btnProfil(object sender, RoutedEventArgs e)
             {
                 if (string.IsNullOrEmpty(_userName))
                 {
                     MainWindow loginWindow = new MainWindow();
-                    loginWindow.Show();
+              
+                loginWindow.Show();
                     this.Close();
                 }
                 else
