@@ -36,7 +36,7 @@ Rendelés során a felhasználó hozzáadhat vagy eltávolíthat egy pizzát a k
 ![{DB1D2EE1-6281-4D7A-A33B-5EE385331FE5}](https://github.com/user-attachments/assets/a0ddfd8f-d39c-4153-b23b-0d4c88772135)
 ![{93C52595-3A9C-4F01-BCA0-C3A5CFB99261}](https://github.com/user-attachments/assets/c686bdef-aed8-446f-94a3-ad67b2c1181e)
 
-Ha a kosár üres, akkor a felhasználó ezt nem fogja tudni megtenni, amit egy hibaüzenet jelez.
+Ha a kosár üres, akkor a felhasználó ezt nem fogja tudni megtenni, amit egy hibaüzenet dob.
 ![{F874EA04-D61C-4964-A640-FF054B2A7409}](https://github.com/user-attachments/assets/c718535e-8fc8-4730-8a7f-9d5f595aaf58)
 
 Ha van legalább egy termék a kosárban, akkor már csak a szállítási címet kell megadni, és a fizetés gombra kattintva rendeli meg a pizzát.
